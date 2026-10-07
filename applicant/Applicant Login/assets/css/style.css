@@ -31,6 +31,7 @@ body {
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
+    contain: strict;
 }
 
 .main-content {
@@ -42,46 +43,66 @@ body {
     padding: 40px 15px;
 }
 
-/* --- GPU Accelerated Background Animations --- */
+/* --- GPU Accelerated Ultra-Smooth Ambient Blob Animations --- */
 @keyframes floatLeftBlob {
     0% {
-        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, -45deg) scale(1);
+        transform: translate3d(0, 0, 0) rotate(-45deg) scale(1);
+    }
+
+    25% {
+        transform: translate3d(28px, -22px, 0) rotate(-43deg) scale(1.03);
     }
 
     50% {
-        transform: translate3d(40px, -35px, 0) rotate3d(0, 0, 1, -47deg) scale(1.06);
+        transform: translate3d(45px, 15px, 0) rotate(-47deg) scale(1.06);
+    }
+
+    75% {
+        transform: translate3d(18px, 32px, 0) rotate(-44deg) scale(1.02);
     }
 
     100% {
-        transform: translate3d(0, -40px, 0) rotate3d(0, 0, 1, -45deg) scale(1);
+        transform: translate3d(0, 0, 0) rotate(-45deg) scale(1);
     }
 }
 
 @keyframes floatRightBlob {
     0% {
-        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 45deg) scale(1);
+        transform: translate3d(0, 0, 0) rotate(45deg) scale(1);
+    }
+
+    25% {
+        transform: translate3d(-28px, 22px, 0) rotate(43deg) scale(1.03);
     }
 
     50% {
-        transform: translate3d(-40px, 40px, 0) rotate3d(0, 0, 1, 42deg) scale(1.06);
+        transform: translate3d(-45px, -15px, 0) rotate(47deg) scale(1.06);
+    }
+
+    75% {
+        transform: translate3d(-18px, -32px, 0) rotate(44deg) scale(1.02);
     }
 
     100% {
-        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 45deg) scale(1);
+        transform: translate3d(0, 0, 0) rotate(45deg) scale(1);
     }
 }
 
 .bg-left {
     position: absolute;
-    width: 650px;
-    height: 650px;
-    background: #d6ece2;
-    left: -220px;
-    top: -200px;
+    width: 700px;
+    height: 700px;
+    background: #d8eee3;
+    left: -250px;
+    top: -250px;
     border-radius: 120px;
     transform: rotate(-45deg);
-    animation: floatLeftBlob 20s ease-in-out infinite;
+    animation: floatLeftBlob 20s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-origin: center center;
+    box-shadow: 0 0 60px rgba(195, 235, 215, 0.35);
 }
 
 .bg-right {
@@ -93,8 +114,12 @@ body {
     bottom: -250px;
     border-radius: 120px;
     transform: rotate(45deg);
-    animation: floatRightBlob 20s ease-in-out infinite;
+    animation: floatRightBlob 20s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-origin: center center;
+    box-shadow: 0 0 60px rgba(195, 235, 215, 0.35);
 }
 
 /* --- Card Architecture --- */

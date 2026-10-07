@@ -108,16 +108,45 @@
   }
 
   var RecruitmentBridge = {
-    // 1. Get Active Circulars from HRD Portal
+    // 1. Get Active Circulars from HRD Portal (Sorted New to Old)
     getCirculars: function () {
       var db = getHrdData();
+      var list = [];
       if (db && Array.isArray(db.circulars) && db.circulars.length > 0) {
-        return db.circulars.filter(function (c) {
+        list = db.circulars.filter(function (c) {
           // Never display draft or invalid Officer (General)
           return c.status === 'ACTIVE' && c.post !== 'Officer (General)';
         });
+      } else {
+        list = DEFAULT_CIRCULARS.slice();
       }
-      return DEFAULT_CIRCULARS;
+
+      // Sort based on new to old (Newest first)
+      return list.sort(function (a, b) {
+        if (a.createdAt && b.createdAt && a.createdAt !== b.createdAt) {
+          var diffTime = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          if (!isNaN(diffTime) && diffTime !== 0) return diffTime;
+          return String(b.createdAt).localeCompare(String(a.createdAt));
+        }
+        if (a.createdAt && !b.createdAt) return -1;
+        if (!a.createdAt && b.createdAt) return 1;
+
+        if (a.applyStart && b.applyStart && a.applyStart !== b.applyStart) {
+          var diffStart = new Date(b.applyStart).getTime() - new Date(a.applyStart).getTime();
+          if (!isNaN(diffStart) && diffStart !== 0) return diffStart;
+          return String(b.applyStart).localeCompare(String(a.applyStart));
+        }
+
+        if (a.code && b.code && a.code !== b.code) {
+          return String(b.code).localeCompare(String(a.code), undefined, { numeric: true, sensitivity: 'base' });
+        }
+
+        if (a.id && b.id && a.id !== b.id) {
+          return String(b.id).localeCompare(String(a.id), undefined, { numeric: true, sensitivity: 'base' });
+        }
+
+        return 0;
+      });
     },
 
     // 2. Find Single Circular
@@ -293,6 +322,59 @@
         circular: circ,
         candidate: profile
       };
+    },
+
+    // 6. Saved / Favourite Jobs Management
+    getSavedJobIds: function () {
+      try {
+        var raw = localStorage.getItem('pubali_applicant_saved_jobs');
+        if (raw !== null) {
+          return JSON.parse(raw) || [];
+        }
+      } catch (e) { }
+      var defaults = ['C-2026-03', 'C-2026-02'];
+      try {
+        localStorage.setItem('pubali_applicant_saved_jobs', JSON.stringify(defaults));
+      } catch (e) { }
+      return defaults;
+    },
+
+    saveSavedJobIds: function (ids) {
+      try {
+        localStorage.setItem('pubali_applicant_saved_jobs', JSON.stringify(ids));
+        window.dispatchEvent(new CustomEvent('erec:saved-jobs-updated', { detail: ids }));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+
+    isJobSaved: function (circId) {
+      var ids = this.getSavedJobIds();
+      return ids.indexOf(circId) !== -1;
+    },
+
+    toggleSavedJob: function (circId) {
+      var ids = this.getSavedJobIds();
+      var idx = ids.indexOf(circId);
+      var saved = false;
+      if (idx !== -1) {
+        ids.splice(idx, 1);
+        saved = false;
+      } else {
+        ids.push(circId);
+        saved = true;
+      }
+      this.saveSavedJobIds(ids);
+      return { saved: saved, ids: ids };
+    },
+
+    getFavouriteCirculars: function () {
+      var savedIds = this.getSavedJobIds();
+      var all = this.getCirculars();
+      return all.filter(function (c) {
+        return savedIds.indexOf(c.id) !== -1;
+      });
     },
 
     getApplicantProfile: getApplicantProfile,

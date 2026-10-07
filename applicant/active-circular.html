@@ -246,14 +246,17 @@
                     <div>
                       <h5 class="fw-bold text-dark mb-1"><i class="bi bi-briefcase-fill text-success me-2"></i> Active
                         Job Circulars</h5>
-                      <p class="text-muted mb-0 small">Explore ongoing career opportunities at Pubali Bank PLC</p>
+                      <p class="text-muted mb-0 small">Explore ongoing career opportunities at Pubali Bank PLC (Sorted New to Old)</p>
                     </div>
-                    <a href="javascript:void(0)" id="totalCircularsBadge"
-                      class="btn btn-green-solid btn-sm fw-semibold d-inline-flex align-items-center gap-2 shadow-sm"
-                      title="Click to view all active circulars" onclick="resetCircularSearch()">
-                      <span id="totalCircularsLabel">Total Circulars</span>
-                      <span class="badge bg-success text-white rounded-pill px-2 py-1" id="totalCircularCount">0</span>
-                    </a>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-light text-secondary border px-2 py-1 small"><i class="bi bi-sort-down text-success me-1"></i>New to Old</span>
+                      <a href="javascript:void(0)" id="totalCircularsBadge"
+                        class="btn btn-green-solid btn-sm fw-semibold d-inline-flex align-items-center gap-2 shadow-sm"
+                        title="Click to view all active circulars" onclick="resetCircularSearch()">
+                        <span id="totalCircularsLabel">Total Circulars</span>
+                        <span class="badge bg-success text-white rounded-pill px-2 py-1" id="totalCircularCount">0</span>
+                      </a>
+                    </div>
                   </div>
 
                   <div class="row g-3" id="circularsGrid">
@@ -374,6 +377,21 @@
         if (!grid || !window.RecruitmentBridge) return;
 
         const circulars = window.RecruitmentBridge.getCirculars();
+
+        // Sort based on new to old (Newest first)
+        circulars.sort((a, b) => {
+          if (a.createdAt && b.createdAt && a.createdAt !== b.createdAt) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          }
+          if (a.applyStart && b.applyStart && a.applyStart !== b.applyStart) {
+            return new Date(b.applyStart) - new Date(a.applyStart);
+          }
+          if (a.code && b.code && a.code !== b.code) {
+            return b.code.localeCompare(a.code, undefined, { numeric: true, sensitivity: 'base' });
+          }
+          return (b.id || '').localeCompare(a.id || '', undefined, { numeric: true });
+        });
+
         const countBadge = document.getElementById('totalCircularCount');
         if (countBadge) countBadge.textContent = circulars.length;
 
@@ -396,6 +414,7 @@
           const publishDate = circ.applyStart || '2026-10-01';
           const deadline = circ.applyEnd || '2026-11-15';
           const isApplied = window.RecruitmentBridge.hasApplied(circ.id);
+          const isSaved = window.RecruitmentBridge.isJobSaved(circ.id);
           const intro = circ.intro || circ.postLine || ('Click to view circular requirements and apply for ' + title + ' at Pubali Bank PLC.');
           const vacancies = circ.vacancies ? `${circ.vacancies} ${circ.vacancies === 1 ? 'Vacancy' : 'Vacancies'}` : '';
 
@@ -408,8 +427,8 @@
                   <span class="badge bg-light text-secondary border fw-medium" style="font-size: 0.72rem;">Ref: ${code}</span>
                   ${vacancies ? `<span class="badge bg-success-subtle text-success border border-success-subtle ms-1" style="font-size: 0.72rem;">${vacancies}</span>` : ''}
                 </div>
-                <button type="button" class="bookmark-btn-toggle" onclick="toggleBookmark(this)" title="Save Job">
-                  <i class="bi bi-bookmark-heart"></i>
+                <button type="button" class="bookmark-btn-toggle ${isSaved ? 'saved' : ''}" onclick="toggleBookmark(this, '${circ.id}')" title="Save Job">
+                  <i class="bi ${isSaved ? 'bi-bookmark-heart-fill' : 'bi-bookmark-heart'}"></i>
                 </button>
               </div>
 
@@ -583,18 +602,19 @@
       }
 
       // 4. Bookmark Toggle Logic
-      function toggleBookmark(btnEl) {
-        const isSaved = btnEl.classList.contains('saved');
-        const icon = btnEl.querySelector('i');
-
-        if (isSaved) {
-          btnEl.classList.remove('saved');
-          if (icon) icon.className = 'bi bi-bookmark-heart';
-          showToast('Job removed from saved list', 'secondary');
-        } else {
-          btnEl.classList.add('saved');
-          if (icon) icon.className = 'bi bi-bookmark-heart-fill';
-          showToast('Job saved to your bookmarks!', 'success');
+      function toggleBookmark(btnEl, circId) {
+        if (window.RecruitmentBridge && circId) {
+          const res = window.RecruitmentBridge.toggleSavedJob(circId);
+          const icon = btnEl.querySelector('i');
+          if (res.saved) {
+            btnEl.classList.add('saved');
+            if (icon) icon.className = 'bi bi-bookmark-heart-fill';
+            showToast('Job saved to your favourite jobs!', 'success');
+          } else {
+            btnEl.classList.remove('saved');
+            if (icon) icon.className = 'bi bi-bookmark-heart';
+            showToast('Job removed from favourite jobs', 'secondary');
+          }
         }
       }
 

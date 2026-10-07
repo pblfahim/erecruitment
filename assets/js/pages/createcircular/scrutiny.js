@@ -20,24 +20,26 @@
   var tab = 'ALL';
 
   var FIELDS = [
-    { key: 'name', label: 'Name' },
-    { key: 'fatherName', label: "Father's name" },
-    { key: 'motherName', label: "Mother's name" },
-    { key: 'dob', label: 'Date of birth', type: 'date' },
-    { key: 'nid', label: 'National ID' },
-    { key: 'mobile', label: 'Mobile' },
-    { key: 'email', label: 'E-mail', type: 'email' },
-    { key: 'maritalStatus', label: 'Marital status' },
-    { key: 'quota', label: 'Quota claimed' },
-    { key: 'presentAddress', label: 'Present address' },
-    { key: 'permanentAddress', label: 'Permanent address' }
+    { key: 'name', label: 'Candidate Name', shortLabel: 'Applicant Name' },
+    { key: 'dob', label: 'Date of Birth', type: 'date', shortLabel: 'Date of Birth' },
+    { key: 'gender', label: 'Gender', shortLabel: 'Gender' },
+    { key: 'nid', label: 'National ID', shortLabel: 'National ID' },
+    { key: 'district', label: 'Home District', shortLabel: 'District' },
+    { key: 'fatherName', label: "Father's Name", shortLabel: "Father's Name" },
+    { key: 'motherName', label: "Mother's Name", shortLabel: "Mother's Name" },
+    { key: 'mobile', label: 'Mobile Number', shortLabel: 'Mobile' },
+    { key: 'email', label: 'Email Address', type: 'email', shortLabel: 'Email' },
+    { key: 'maritalStatus', label: 'Marital Status', shortLabel: 'Marital Status' },
+    { key: 'quota', label: 'Quota Claimed', shortLabel: 'Quota' },
+    { key: 'presentAddress', label: 'Present Address', shortLabel: 'Present Address' },
+    { key: 'permanentAddress', label: 'Permanent Address', shortLabel: 'Permanent Address' }
   ];
 
   function fieldsFor(a) {
     var list = FIELDS.slice();
     (a.education || []).forEach(function (e, i) {
-      list.push({ key: 'edu:' + i + ':result', label: e.level + ' result' });
-      list.push({ key: 'edu:' + i + ':year', label: e.level + ' passing year' });
+      list.push({ key: 'edu:' + i + ':result', label: e.level + ' result', shortLabel: 'Result' });
+      list.push({ key: 'edu:' + i + ':year', label: e.level + ' passing year', shortLabel: 'Passing Year' });
     });
     return list;
   }
@@ -45,13 +47,17 @@
   function getVal(a, key) {
     var p = key.split(':');
     if (p[0] === 'edu') return a.education[+p[1]] ? a.education[+p[1]][p[2]] : '';
+    if (key === 'presentAddress' && !a.presentAddress) return a.address || '';
     return a[key];
   }
 
   function setVal(a, key, v) {
     var p = key.split(':');
     if (p[0] === 'edu') { if (a.education[+p[1]]) a.education[+p[1]][p[2]] = v; }
-    else a[key] = v;
+    else {
+      a[key] = v;
+      if (key === 'presentAddress') a.address = v;
+    }
   }
 
   function show(f, v) {
@@ -84,88 +90,327 @@
     var c = store.circular(stg.circularId);
     var sc = draftOf(row, a);
     var fields = fieldsFor(a);
+    var fieldMap = {};
+    fields.forEach(function (f) { fieldMap[f.key] = f; });
 
     /* one field, applied value beside what the document shows */
     function rowHtml(f) {
+      if (!f) return '';
       var st = sc.fields[f.key] || {};
       var cur = getVal(a, f.key);
-      var cls = 'vrow' + (st.changed ? ' edited' : (st.ok ? ' ok' : ''));
+      var cls = 'scrutiny-field-row' + (st.changed ? ' edited' : (st.ok ? ' ok' : ''));
 
       var applied = st.changed
-        ? '<span class="was">' + fmt.esc(show(f, st.was)) + '</span>'
-        : fmt.esc(show(f, cur));
+        ? '<span class="was">' + fmt.esc(show(f, st.was)) + '</span><span class="val-changed"><i class="bi bi-pencil-fill me-1"></i>' + fmt.esc(show(f, cur)) + '</span>'
+        : '<span class="val-text">' + fmt.esc(show(f, cur)) + '</span>';
 
       var verified = st.changed
-        ? '<span class="val changed"><i class="bi bi-pencil-fill me-1"></i>' + fmt.esc(show(f, cur)) + '</span>'
-        : st.ok
-          ? '<span class="ver-ok"><i class="bi bi-check-circle-fill me-1"></i>Matches the document</span>'
-          : '<span class="ver-none">Not checked yet</span>';
+        ? '<span class="ver-edited-badge"><i class="bi bi-pencil-fill me-1"></i>Corrected</span>'
+        : (st.ok
+          ? '<span class="ver-ok-badge"><i class="bi bi-check-circle-fill me-1"></i>Matches document</span>'
+          : '<span class="ver-pending-badge"><i class="bi bi-clock-history me-1"></i>Pending</span>');
 
-      return '<div class="' + cls + '" data-field="' + fmt.esc(f.key) + '">' +
-        '<span class="lbl">' + fmt.esc(f.label) + '</span>' +
-        '<span class="val">' + applied + '</span>' +
-        '<span class="ver">' + verified + '</span>' +
-        '<span class="acts">' +
+      var displayLabel = f.shortLabel || f.label;
+
+      return '<li class="' + cls + '" data-field="' + fmt.esc(f.key) + '">' +
+        '<div class="scrutiny-field-main">' +
+        '<span class="scrutiny-prop-label">' + fmt.esc(displayLabel) + ':</span>' +
+        '<span class="scrutiny-prop-val">' + applied + '</span>' +
+        '</div>' +
+        '<div class="scrutiny-field-ver">' + verified + '</div>' +
+        '<div class="scrutiny-field-acts">' +
         '<button class="btn btn-sm btn-' + (st.ok && !st.changed ? 'success' : 'outline-success') +
-        '" data-confirm="' + fmt.esc(f.key) + '" title="Matches the document">' +
+        '" data-confirm="' + fmt.esc(f.key) + '" title="Matches original document">' +
         '<i class="bi bi-check-lg"></i></button>' +
         '<button class="btn btn-sm btn-' + (st.changed ? 'warning' : 'outline-secondary') +
         '" data-update="' + fmt.esc(f.key) + '" title="Correct this value">' +
         '<i class="bi bi-pencil"></i></button>' +
-        '</span></div>';
+        '</div>' +
+        '</li>';
+    }
+
+    function staticRowHtml(label, val) {
+      return '<li class="scrutiny-field-row static-field">' +
+        '<div class="scrutiny-field-main">' +
+        '<span class="scrutiny-prop-label">' + fmt.esc(label) + ':</span>' +
+        '<span class="scrutiny-prop-val"><span class="val-text">' + fmt.esc(val || '—') + '</span></span>' +
+        '</div>' +
+        '</li>';
     }
 
     function docHtml(d, i) {
-      return '<div class="doc-row" data-doc="' + i + '">' +
-        '<div class="nm">' + fmt.esc(d.name) + '</div>' +
-        '<div class="btn-group btn-group-sm">' +
-        '<button class="btn btn-outline-success' + (d.ok === true ? ' active' : '') + '" data-dok="' + i + '">' +
+      var ok = d.ok === true;
+      var no = d.ok === false;
+      var cardCls = 'doc-check-card' + (ok ? ' doc-ok' : (no ? ' doc-no' : ''));
+      var statusBadge = ok
+        ? '<span class="ver-ok-badge"><i class="bi bi-check-circle-fill me-1"></i>Produced</span>'
+        : (no
+          ? '<span class="ver-edited-badge text-danger border-danger-subtle bg-danger-subtle"><i class="bi bi-x-circle-fill me-1"></i>Missing</span>'
+          : '<span class="ver-pending-badge"><i class="bi bi-clock-history me-1"></i>Not checked</span>');
+
+      return '<div class="col-md-6" data-doc="' + i + '">' +
+        '<div class="' + cardCls + '">' +
+        '<div class="d-flex align-items-center justify-content-between gap-2">' +
+        '<div class="d-flex align-items-center gap-2 min-w-0">' +
+        '<i class="bi bi-file-earmark-check fs-5 ' + (ok ? 'text-success' : (no ? 'text-danger' : 'text-secondary')) + '"></i>' +
+        '<div class="min-w-0">' +
+        '<div class="doc-name text-truncate fw-semibold text-dark fs-13" title="' + fmt.esc(d.name) + '">' + fmt.esc(d.name) + '</div>' +
+        '<div class="mt-1">' + statusBadge + '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="btn-group btn-group-sm flex-shrink-0">' +
+        '<button class="btn btn-' + (ok ? 'success' : 'outline-success') + '" data-dok="' + i + '" title="Mark produced">' +
         '<i class="bi bi-check-lg"></i></button>' +
-        '<button class="btn btn-outline-danger' + (d.ok === false ? ' active' : '') + '" data-dno="' + i + '">' +
+        '<button class="btn btn-' + (no ? 'danger' : 'outline-danger') + '" data-dno="' + i + '" title="Mark missing">' +
         '<i class="bi bi-x-lg"></i></button>' +
-        '</div></div>';
+        '</div>' +
+        '</div></div></div>';
     }
 
+    var educationHtml = (a.education || []).map(function (e, i) {
+      return '<div class="educational-qualification">' +
+        '<div class="passing-year">' +
+        '<p><span>' + fmt.pad(i + 1, 2) + '.</span>' + fmt.esc(e.level) + '</p>' +
+        '</div>' +
+        '<div class="education-dt">' +
+        '<h6>' + fmt.esc(e.board || 'Institution / Board') + '</h6>' +
+        (e.subject ? '<div class="small text-muted mb-2">Major / Subject: <strong class="text-dark">' + fmt.esc(e.subject) + '</strong></div>' : '') +
+        '<ul class="informations p-0 m-0">' +
+        rowHtml(fieldMap['edu:' + i + ':result']) +
+        rowHtml(fieldMap['edu:' + i + ':year']) +
+        '</ul>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+    if (!educationHtml) {
+      educationHtml = '<div class="text-muted fst-italic py-2"><i class="bi bi-info-circle me-1"></i>No educational records found.</div>';
+    }
+
+    var experienceHtml = (a.experience || []).map(function (x, xi) {
+      return '<div class="educational-qualification">' +
+        '<div class="passing-year">' +
+        '<p><span>' + fmt.pad(xi + 1, 2) + '.</span>' + fmt.esc(x.years) + ' Years Exp.</p>' +
+        '</div>' +
+        '<div class="education-dt">' +
+        '<h6>' + fmt.esc(x.org) + '</h6>' +
+        '<p class="position mb-0"><span>Position:</span> ' + fmt.esc(x.role) + '</p>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+    if (!experienceHtml) {
+      experienceHtml = '<div class="text-muted fst-italic py-2"><i class="bi bi-info-circle me-1"></i>No previous work experience declared.</div>';
+    }
+
+    var skillsList = [];
+    if (Array.isArray(a.computerSkills)) {
+      skillsList = a.computerSkills;
+    } else if (typeof a.computerSkills === 'string' && a.computerSkills.trim()) {
+      skillsList = a.computerSkills.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    } else {
+      skillsList = ['MS Office (Word, Excel, PowerPoint)', 'Email & Internet Applications', 'Typing (Bangla & English)'];
+    }
+
+    var langList = [];
+    if (Array.isArray(a.languages)) {
+      langList = a.languages;
+    } else if (typeof a.languages === 'string' && a.languages.trim()) {
+      langList = a.languages.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    } else {
+      langList = ['Bangla (Native)', 'English (Professional)'];
+    }
+
+    var tagsHtml = skillsList.map(function (sk) {
+      return '<li>' + fmt.esc(sk) + '</li>';
+    }).concat(langList.map(function (lg) {
+      return '<li><i class="bi bi-translate me-1"></i>' + fmt.esc(lg) + '</li>';
+    })).join('');
+
+    if (a.expectedSalary) {
+      tagsHtml += '<li><i class="bi bi-cash-stack me-1"></i>Expected: BDT ' + fmt.money(a.expectedSalary) + '</li>';
+    }
+
+    var avatarSrc = a.photo || a.avatar || 'assets/images/cv.png';
+
     var body =
-      '<div class="d-flex align-items-center gap-2 flex-wrap mb-3">' +
-      ui.avatar(a.name, 'primary') +
-      '<div><div class="fw-bold">' + fmt.esc(a.name) + '</div>' +
-      '<div class="fs-12 text-muted mono">Roll ' + fmt.esc(row.rollNo || '—') + ' · ' + fmt.esc(a.appNo) +
-      ' · ' + fmt.esc(c.post) + '</div></div>' +
-      '<div class="ms-auto" id="sc-status">' + ui.statusPill(statusOf(row)) + '</div>' +
+      '<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pb-3 mb-3 border-bottom">' +
+      '<div>' +
+      '<h5 class="fw-bold mb-1" style="color: var(--brand-primary, #0f4c3a);"><i class="bi bi-file-earmark-person me-2"></i>Candidate Resume &amp; Document Scrutiny</h5>' +
+      '<div class="small text-muted">' +
+      'Circular: <strong class="text-dark">' + fmt.esc(c.code) + '</strong> &bull; ' +
+      'Post: <strong class="text-dark">' + fmt.esc(c.post) + '</strong> &bull; ' +
+      'Viva Voce &amp; Document Verification' +
+      '</div>' +
+      '</div>' +
+      '<div class="d-flex align-items-center gap-2 flex-wrap">' +
+      '<button class="btn btn-sm btn-outline-success" id="btn-all-ok" title="Mark all verifiable fields as matching document">' +
+      '<i class="bi bi-check-all me-1"></i>Everything matches</button>' +
+      '<button class="btn btn-sm btn-outline-secondary" id="btn-clear-ok" title="Clear non-corrected verification ticks">' +
+      '<i class="bi bi-arrow-counterclockwise me-1"></i>Clear checks</button>' +
+      '<button class="btn btn-sm btn-outline-secondary" id="btn-print-cv" title="Print candidate application / resume">' +
+      '<i class="bi bi-printer me-1"></i>Print Resume</button>' +
+      '</div>' +
       '</div>' +
 
       '<div class="verify-summary" id="sc-summary"></div>' +
 
-      '<div class="d-flex gap-2 mb-2 flex-wrap">' +
-      '<button class="btn btn-sm btn-outline-success" id="btn-all-ok">' +
-      '<i class="bi bi-check-all me-1"></i>Everything matches</button>' +
-      '<button class="btn btn-sm btn-outline-secondary" id="btn-clear-ok">Clear checks</button>' +
-      '<button class="btn btn-sm btn-outline-secondary ms-auto" id="btn-print-cv">' +
-      '<i class="bi bi-printer me-1"></i>Print application</button>' +
+      '<div class="resume-card-wrapper">' +
+      '<div class="row g-4 mb-4">' +
+
+      /* 1. AUTHOR PROFILE HEADER */
+      '<div class="col-lg-6">' +
+      '<div class="author-area">' +
+      '<div class="author-img">' +
+      '<img src="' + fmt.esc(avatarSrc) + '" alt="' + fmt.esc(a.name) + '" onerror="this.onerror=null;this.src=\'assets/images/cv.png\';">' +
+      '</div>' +
+      '<div class="name-degination">' +
+      '<h4>' + fmt.esc(a.name) + '</h4>' +
+      '<span class="post-title">' + fmt.esc(c.post) + '</span>' +
+      '<div class="d-flex align-items-center gap-2 mt-2 flex-wrap">' +
+      '<span class="badge bg-light text-dark border"><i class="bi bi-card-text me-1 text-success"></i>Roll: <b>' + fmt.esc(row.rollNo || '—') + '</b></span>' +
+      '<span class="badge bg-light text-dark border"><i class="bi bi-file-earmark-person me-1 text-success"></i>App No: <b>' + fmt.esc(a.appNo) + '</b></span>' +
+      '<span id="sc-status">' + ui.statusPill(statusOf(row)) + '</span>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
       '</div>' +
 
-      '<div class="vrow vrow-head">' +
-      '<span>Field</span><span>As submitted</span><span>Against the document</span><span></span>' +
+      /* 2. CONTACT INFO HEADER */
+      '<div class="col-lg-6">' +
+      '<div class="contact-area">' +
+      '<h4>Contact Info</h4>' +
+      '<ul>' +
+      '<li><i class="bi bi-telephone"></i> Mobile Number: <a href="tel:' + fmt.esc(a.mobile) + '">' + fmt.esc(a.mobile) + '</a></li>' +
+      '<li><i class="bi bi-envelope"></i> Email Address: <a href="mailto:' + fmt.esc(a.email) + '">' + fmt.esc(a.email) + '</a></li>' +
+      '<li><i class="bi bi-geo-alt"></i> Home District: <strong class="text-dark">' + fmt.esc(a.district || '—') + '</strong></li>' +
+      '<li><i class="bi bi-calendar3"></i> Applied Date: <span>' + (a.appliedAt ? fmt.date(a.appliedAt) : '—') + '</span></li>' +
+      '</ul>' +
       '</div>' +
-      '<div id="verify-list">' + fields.map(rowHtml).join('') + '</div>' +
+      '</div>' +
+      '</div>' +
 
-      '<div class="section-title mt-4"><i class="bi bi-folder-check"></i> Documents produced</div>' +
-      '<div id="doc-list">' + sc.checklist.map(docHtml).join('') + '</div>' +
-      '<button class="btn btn-sm btn-outline-secondary mt-2" id="btn-docs-all">Mark all produced</button>' +
+      /* 3. CAREER OBJECTIVE SECTION */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapseCareerObjective" aria-expanded="true" aria-controls="collapseCareerObjective" role="button">' +
+      '<div class="section-title-text"><h6>Career Objective &amp; Summary</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapseCareerObjective">' +
+      '<div class="description pt-1">' +
+      '<p>' + fmt.esc(a.objective || a.summary || "To pursue a challenging and rewarding career in banking and financial sector with Pubali Bank PLC, utilising academic qualifications, professional acumen, and commitment to deliver exceptional customer value and institutional excellence.") + '</p>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
 
-      '<div class="section-title mt-4"><i class="bi bi-chat-left-text"></i> Remarks</div>' +
-      '<textarea class="form-control" id="f-rem" rows="2" ' +
-      'placeholder="e.g. Master\'s transcript not produced; undertaking taken.">' +
+      /* 4. WORK EXPERIENCE SECTION */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapseExperience" aria-expanded="true" aria-controls="collapseExperience" role="button">' +
+      '<div class="section-title-text"><h6>Work Experience</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapseExperience">' +
+      '<div class="pt-1">' + experienceHtml + '</div>' +
+      '</div>' +
+      '</div>' +
+
+      /* 5. COMPUTER LITERACY & SKILLS SECTION */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapseSkills" aria-expanded="true" aria-controls="collapseSkills" role="button">' +
+      '<div class="section-title-text"><h6>Computer Literacy &amp; Skills</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapseSkills">' +
+      '<div class="tag-area pt-1"><ul>' + tagsHtml + '</ul></div>' +
+      '</div>' +
+      '</div>' +
+
+      /* 6. EDUCATIONAL QUALIFICATION SECTION */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapseEducation" aria-expanded="true" aria-controls="collapseEducation" role="button">' +
+      '<div class="section-title-text"><h6>Educational Qualification</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapseEducation">' +
+      '<div class="pt-1">' + educationHtml + '</div>' +
+      '</div>' +
+      '</div>' +
+
+      /* 7. PERSONAL INFORMATION SECTION */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapsePersonalInfo" aria-expanded="true" aria-controls="collapsePersonalInfo" role="button">' +
+      '<div class="section-title-text"><h6>Personal Information</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapsePersonalInfo">' +
+      '<div class="row g-4 pt-1">' +
+      '<div class="col-lg-6 devaider1 position-relative">' +
+      '<div class="informations"><ul>' +
+      rowHtml(fieldMap['name']) +
+      rowHtml(fieldMap['dob']) +
+      rowHtml(fieldMap['gender']) +
+      rowHtml(fieldMap['nid']) +
+      rowHtml(fieldMap['district']) +
+      staticRowHtml('Nationality', a.nationality || 'Bangladeshi') +
+      staticRowHtml('Blood Group', a.bloodGroup || '—') +
+      staticRowHtml('Religion', a.religion || '—') +
+      '</ul></div>' +
+      '</div>' +
+      '<div class="col-lg-6 ps-lg-4">' +
+      '<div class="informations"><ul>' +
+      rowHtml(fieldMap['fatherName']) +
+      rowHtml(fieldMap['motherName']) +
+      rowHtml(fieldMap['mobile']) +
+      rowHtml(fieldMap['email']) +
+      staticRowHtml('Emergency Contact', a.altContact || '—') +
+      rowHtml(fieldMap['maritalStatus']) +
+      rowHtml(fieldMap['quota']) +
+      rowHtml(fieldMap['presentAddress']) +
+      rowHtml(fieldMap['permanentAddress']) +
+      '</ul></div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      /* 8. DOCUMENTS PRODUCED CHECKLIST */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapseDocuments" aria-expanded="true" aria-controls="collapseDocuments" role="button">' +
+      '<div class="section-title-text"><h6>Documents Produced &amp; Verification</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapseDocuments">' +
+      '<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">' +
+      '<span class="text-muted fs-12"><i class="bi bi-folder-check me-1 text-success"></i>Verify candidate\'s original certificates and transcripts produced in-person:</span>' +
+      '<button class="btn btn-sm btn-outline-success" id="btn-docs-all"><i class="bi bi-check-all me-1"></i>Mark all produced</button>' +
+      '</div>' +
+      '<div class="row g-2" id="doc-list">' + sc.checklist.map(docHtml).join('') + '</div>' +
+      '</div>' +
+      '</div>' +
+
+      /* 9. REMARKS & CONDITIONAL TERMS */
+      '<div class="single-information-area">' +
+      '<div class="section-title mb-3" data-bs-toggle="collapse" data-bs-target="#collapseRemarks" aria-expanded="true" aria-controls="collapseRemarks" role="button">' +
+      '<div class="section-title-text"><h6>Scrutiny Observations &amp; Remarks</h6></div>' +
+      '<span class="collapse-icon-btn" title="Toggle Section"><i class="bi bi-chevron-down"></i></span>' +
+      '</div>' +
+      '<div class="collapse show" id="collapseRemarks">' +
+      '<div class="pt-1">' +
+      '<label class="form-label fw-semibold text-dark fs-13"><i class="bi bi-chat-left-text me-1 text-success"></i>Scrutiny Observations &amp; Findings</label>' +
+      '<textarea class="form-control" id="f-rem" rows="2" placeholder="e.g. Master\'s transcript not produced; undertaking taken to submit by deadline.">' +
       fmt.esc(sc.remarks || '') + '</textarea>' +
-      '<div class="mt-3" id="cond-wrap" hidden>' +
-      '<label class="form-label">Produce remaining documents by</label>' +
-      '<input type="date" class="form-control" id="f-deadline" value="' +
+      '<div class="mt-3 p-3 bg-light rounded border" id="cond-wrap" hidden>' +
+      '<label class="form-label fw-semibold text-dark fs-13 mb-1"><i class="bi bi-calendar-event me-1 text-warning"></i>Conditional Acceptance Deadline</label>' +
+      '<div class="fs-12 text-muted mb-2">Candidate must submit all outstanding original documents by:</div>' +
+      '<input type="date" class="form-control" id="f-deadline" style="max-width: 260px;" value="' +
       fmt.esc(sc.deadline || fmt.addDays(fmt.isoDate(), 30)) + '">' +
-      '</div>';
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      '</div>'; /* End .resume-card-wrapper */
 
     ui.modal({
-      title: 'Document Scrutiny',
+      title: 'Candidate Resume & Document Scrutiny',
       size: 'xl',
       body: body,
       footer:
@@ -180,10 +425,24 @@
         function paintSummary() {
           var okN = fields.filter(function (f) { return sc.fields[f.key] && sc.fields[f.key].ok; }).length;
           var docsOk = sc.checklist.filter(function (d) { return d.ok === true; }).length;
+          var totalFields = fields.length;
+          var totalDocs = sc.checklist.length;
+          var updatesN = sc.updates.length;
+
           api.find('#sc-summary').innerHTML =
-            '<div><b>' + okN + ' / ' + fields.length + '</b>fields checked</div>' +
-            '<div><b>' + docsOk + ' / ' + sc.checklist.length + '</b>documents produced</div>' +
-            '<div><b>' + sc.updates.length + '</b>corrections</div>';
+            '<div class="summary-pill' + (okN === totalFields ? ' complete' : '') + '">' +
+            '<div class="summary-num">' + okN + ' / ' + totalFields + '</div>' +
+            '<div class="summary-label"><i class="bi bi-check2-circle me-1"></i>Fields Checked</div>' +
+            '</div>' +
+            '<div class="summary-pill' + (docsOk === totalDocs ? ' complete' : '') + '">' +
+            '<div class="summary-num">' + docsOk + ' / ' + totalDocs + '</div>' +
+            '<div class="summary-label"><i class="bi bi-folder-check me-1"></i>Documents Produced</div>' +
+            '</div>' +
+            '<div class="summary-pill' + (updatesN > 0 ? ' has-updates' : '') + '">' +
+            '<div class="summary-num">' + updatesN + '</div>' +
+            '<div class="summary-label"><i class="bi bi-pencil-square me-1"></i>Corrections Recorded</div>' +
+            '</div>';
+
           var cw = api.find('#cond-wrap');
           if (cw) cw.hidden = docsOk === sc.checklist.length;
         }
@@ -196,7 +455,10 @@
         }
 
         function paintAllFields() {
-          api.find('#verify-list').innerHTML = fields.map(rowHtml).join('');
+          fields.forEach(function (f) {
+            var el = api.find('[data-field="' + f.key + '"]');
+            if (el) el.outerHTML = rowHtml(f);
+          });
           paintSummary();
         }
 

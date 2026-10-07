@@ -591,6 +591,7 @@
   <script src="assets/js/notifications.js"></script>
   <script src="assets/js/profile-data.js"></script>
   <script src="assets/js/recruitment-bridge.js"></script>
+  <script src="assets/js/cirpreview.js"></script>
 
   <!-- Interactive Dynamic Dashboard Engine -->
   <script>
@@ -784,9 +785,9 @@
               </div>
 
               <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                <a href="javascript:void(0)" class="btn btn-outline-secondary btn-sm" onclick="openQuickApplyModal('${circ.id}')">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="openCircularPreview('${circ.id}')">
                   <i class="bi bi-file-earmark-pdf me-1"></i> Circular
-                </a>
+                </button>
                 ${isApplied ? `
                   <button class="btn btn-secondary btn-sm disabled" disabled style="opacity: 0.92; background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 600;">
                     <i class="bi bi-check-circle-fill me-1 text-success"></i> Applied
@@ -859,9 +860,9 @@
                 <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1" style="font-size: 0.76rem;">
                   <i class="bi bi-check2-circle me-1"></i>${status}
                 </span>
-                <a href="active-circular.html" class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.78rem;" title="View Circular">
+                <button type="button" class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.78rem;" title="View Circular Notice" onclick="openCircularPreview('${job.circularId || safeRef || safeTitle}')">
                   <i class="bi bi-file-earmark-check"></i> Circular
-                </a>
+                </button>
                 <button type="button" class="btn btn-outline-primary btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.78rem;" onclick="viewApplicationSlip('${safeAppNo}', '${safeTitle}', '${safeRef}', '${date}')">
                   <i class="bi bi-receipt"></i> Slip
                 </button>

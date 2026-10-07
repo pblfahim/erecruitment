@@ -295,6 +295,7 @@
   <script src="assets/js/notifications.js"></script>
   <script src="assets/js/profile-data.js"></script>
   <script src="assets/js/recruitment-bridge.js"></script>
+  <script src="assets/js/cirpreview.js"></script>
 
   <!-- Real-Time Applied Jobs Dynamic Table Engine -->
   <script>
@@ -361,9 +362,9 @@
                 <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1" style="font-size: 0.76rem;">
                   <i class="bi bi-check2-circle me-1"></i>${status}
                 </span>
-                <a href="active-circular.html" class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.78rem;" title="View Circular">
+                <button type="button" class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.78rem;" title="View Circular Notice" onclick="openCircularPreview('${item.circularId || ref || title}')">
                   <i class="bi bi-file-earmark-check"></i> Circular
-                </a>
+                </button>
                 <button type="button" class="btn btn-outline-primary btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.78rem;" onclick="viewApplicationSlip('${appNo}', '${title}', '${ref}', '${date}')">
                   <i class="bi bi-receipt"></i> Slip
                 </button>

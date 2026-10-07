@@ -351,8 +351,9 @@
                           <span class="text-danger small">Last Date : 25-07-2026</span>
                         </div>
                         <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                          <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf"></i>
-                            Circular</a>
+                          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="openCircularPreview('Banking Associate (BA)')">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Circular
+                          </button>
                           <button class="btn btn-green-solid btn-sm"
                             onclick="openQuickApplyModal('Banking Associate (BA)')">Apply
                             Now</button>
@@ -378,8 +379,9 @@
                           <span class="text-danger small">Last Date : 16-07-2026</span>
                         </div>
                         <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                          <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf"></i>
-                            Circular</a>
+                          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="openCircularPreview('Graphic Designer specializing in Digital & Motion Content')">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Circular
+                          </button>
                           <button class="btn btn-green-solid btn-sm"
                             onclick="openQuickApplyModal('Graphic Designer specializing in Digital & Motion Content ')">Apply
                             Now</button>
@@ -426,11 +428,11 @@
                             <td class="text-start">14 May, 2026</td>
                             <td class="text-center">
                               <div class="d-flex flex-column align-items-center justify-content-center gap-1">
-                                <a href="#"
+                                <button type="button"
                                   class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1"
-                                  title="View Circular">
+                                  title="View Circular Notice" onclick="openCircularPreview('Senior Officer (IT)')">
                                   <i class="bi bi-file-earmark-check"></i> View Circular
-                                </a>
+                                </button>
                                 <!-- <a href="#"
                                   class="btn btn-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1"
                                   title="Download Admit Card"
@@ -451,11 +453,11 @@
                             <td class="text-start">02 April, 2026</td>
                             <td class="text-center">
                               <div class="d-flex justify-content-center gap-1">
-                                <a href="#"
+                                <button type="button"
                                   class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1"
-                                  title="View Circular">
+                                  title="View Circular Notice" onclick="openCircularPreview('Management Trainee Officer (MTO)')">
                                   <i class="bi bi-file-earmark-check"></i> View Circular
-                                </a>
+                                </button>
                               </div>
                             </td>
                           </tr>
@@ -470,11 +472,11 @@
                             <td class="text-start">15 January, 2026</td>
                             <td class="text-center">
                               <div class="d-flex justify-content-center gap-1">
-                                <a href="#"
+                                <button type="button"
                                   class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1"
-                                  title="View Circular">
+                                  title="View Circular Notice" onclick="openCircularPreview('Assistant General Manager (AGM) - Cybersecurity')">
                                   <i class="bi bi-file-earmark-check"></i> View Circular
-                                </a>
+                                </button>
                               </div>
                             </td>
                           </tr>
@@ -489,11 +491,11 @@
                             <td class="text-start">01 July, 2026</td>
                             <td class="text-center">
                               <div class="d-flex justify-content-center gap-1">
-                                <a href="#"
+                                <button type="button"
                                   class="btn btn-outline-success btn-sm fw-semibold shadow-sm d-inline-flex align-items-center gap-1"
-                                  title="View Circular">
+                                  title="View Circular Notice" onclick="openCircularPreview('Officer (Cash)')">
                                   <i class="bi bi-file-earmark-check"></i> View Circular
-                                </a>
+                                </button>
                               </div>
                             </td>
                           </tr>
@@ -631,6 +633,8 @@
           </div>
 
           <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+          <script src="assets/js/recruitment-bridge.js"></script>
+          <script src="assets/js/cirpreview.js"></script>
 
           <!-- Interactive Dashboard Engine -->
           <script>

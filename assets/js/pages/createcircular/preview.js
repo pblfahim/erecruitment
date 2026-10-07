@@ -363,8 +363,8 @@
     var currentZoom = 100;       // 85, 100, 115
 
     function getDocData() {
-      var post = (c && c.post) ? String(c.post).trim() : 'Job Posting';
-      var title = (c && c.title) ? String(c.title).trim() : (post !== 'Job Posting' ? ('Recruitment of ' + post) : 'Recruitment Circular');
+      var post = (c && c.post) ? String(c.post).trim() : 'Officer (General)';
+      var title = (c && c.title) ? String(c.title).trim() : ('Recruitment of ' + post);
       var isGraphicNotice = /graphic|design/i.test(post) || /graphic|design/i.test(title);
 
       var rules = (c && c.eligibilityRules) || [];

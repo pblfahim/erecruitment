@@ -353,6 +353,7 @@
   <script src="assets/js/notifications.js"></script>
   <script src="assets/js/profile-data.js"></script>
   <script src="assets/js/recruitment-bridge.js"></script>
+  <script src="assets/js/cirpreview.js"></script>
 
   <!-- Dynamic Active Circulars Engine -->
   <script>
@@ -418,9 +419,9 @@
               </div>
 
               <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                <a href="javascript:void(0)" class="btn btn-outline-secondary btn-sm" onclick="openCircularDetailsModal('${circ.id}')">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="openCircularPreview('${circ.id}')">
                   <i class="bi bi-file-earmark-pdf me-1"></i> Circular
-                </a>
+                </button>
                 ${isApplied ? `
                   <button class="btn btn-secondary btn-sm disabled" disabled style="opacity: 0.92; background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 600;">
                     <i class="bi bi-check-circle-fill me-1 text-success"></i> Applied
@@ -439,13 +440,15 @@
       updateCircularCount();
     }
 
-    // Circular Details Modal Generator
+    // Circular Details Modal Generator (from preview.js)
     function openCircularDetailsModal(circId) {
-      if (!window.RecruitmentBridge) return;
-      const circ = window.RecruitmentBridge.getCircular(circId);
-      if (!circ) return;
-
-      openQuickApplyModal(circ.id);
+      if (typeof openCircularPreview === 'function') {
+        openCircularPreview(circId);
+      } else if (window.CircularPreview && window.CircularPreview.openPreviewModal) {
+        window.CircularPreview.openPreviewModal(circId);
+      } else {
+        openQuickApplyModal(circId);
+      }
     }
 
     // 2. Quick Apply Modal Logic

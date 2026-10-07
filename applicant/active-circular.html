@@ -246,15 +246,16 @@
                     <div>
                       <h5 class="fw-bold text-dark mb-1"><i class="bi bi-briefcase-fill text-success me-2"></i> Active
                         Job Circulars</h5>
-                      <p class="text-muted mb-0 small">Explore ongoing career opportunities at Pubali Bank PLC (Sorted New to Old)</p>
+                      <p class="text-muted mb-0 small">Explore ongoing career opportunities at Pubali Bank PLC (New to
+                        Old)</p>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                      <span class="badge bg-light text-secondary border px-2 py-1 small"><i class="bi bi-sort-down text-success me-1"></i>New to Old</span>
                       <a href="javascript:void(0)" id="totalCircularsBadge"
                         class="btn btn-green-solid btn-sm fw-semibold d-inline-flex align-items-center gap-2 shadow-sm"
                         title="Click to view all active circulars" onclick="resetCircularSearch()">
                         <span id="totalCircularsLabel">Total Circulars</span>
-                        <span class="badge bg-success text-white rounded-pill px-2 py-1" id="totalCircularCount">0</span>
+                        <span class="badge bg-success text-white rounded-pill px-2 py-1"
+                          id="totalCircularCount">0</span>
                       </a>
                     </div>
                   </div>
@@ -287,116 +288,116 @@
     </div>
   </div>
 
-    <!-- QUICK APPLY MODAL -->
-    <div class="modal fade" id="quickApplyModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
-          <div class="modal-header border-bottom bg-light" style="border-radius: 16px 16px 0 0;">
-            <div>
-              <h5 class="fw-bold text-dark mb-0" id="modalJobTitle">Apply for Position</h5>
-              <small class="text-muted" id="modalJobSubtitle">Pubali Bank PLC Recruitment Circular</small>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- QUICK APPLY MODAL -->
+  <div class="modal fade" id="quickApplyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+        <div class="modal-header border-bottom bg-light" style="border-radius: 16px 16px 0 0;">
+          <div>
+            <h5 class="fw-bold text-dark mb-0" id="modalJobTitle">Apply for Position</h5>
+            <small class="text-muted" id="modalJobSubtitle">Pubali Bank PLC Recruitment Circular</small>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <!-- 1. Dynamic Job details frame -->
+          <div class="card border-0 shadow-sm p-3 mb-3 position-relative quick-apply-job-frame bg-light"
+            id="modalJobDetailsFrame">
+            <ul class="list-unstyled text-secondary small mb-0 flex-grow-1 cir-small">
+              <li class="mb-2"><i class="bi bi-briefcase text-success me-2"></i><strong>Circular Ref:</strong> <span
+                  id="modalJobRef" class="fw-semibold text-dark">PBPLC/HRD/REC/2026</span></li>
+              <li class="mb-2"><i class="bi bi-people text-success me-2"></i><strong>Vacancies:</strong> <span
+                  id="modalJobVacancies" class="fw-semibold text-dark">1 Post</span></li>
+              <li class="mb-2"><i class="bi bi-calendar-check text-success me-2"></i><strong>Publish Date:</strong>
+                <span id="modalJobPublish" class="fw-semibold text-dark">30-06-2026</span>
+              </li>
+              <li class="mb-2 text-danger"><i class="bi bi-clock-history me-2"></i><strong>Application
+                  Deadline:</strong> <span id="modalJobDeadline" class="fw-semibold">25-07-2026</span></li>
+              <li class="mb-0 text-muted"><i
+                  class="bi bi-info-circle text-primary me-2"></i><strong>Eligibility:</strong> <span
+                  id="modalJobEligibility">Complies with published circular criteria</span></li>
+            </ul>
           </div>
 
-          <div class="modal-body p-4">
-            <!-- 1. Dynamic Job details frame -->
-            <div class="card border-0 shadow-sm p-3 mb-3 position-relative quick-apply-job-frame bg-light"
-              id="modalJobDetailsFrame">
-              <ul class="list-unstyled text-secondary small mb-0 flex-grow-1 cir-small">
-                <li class="mb-2"><i class="bi bi-briefcase text-success me-2"></i><strong>Circular Ref:</strong> <span
-                    id="modalJobRef" class="fw-semibold text-dark">PBPLC/HRD/REC/2026</span></li>
-                <li class="mb-2"><i class="bi bi-people text-success me-2"></i><strong>Vacancies:</strong> <span
-                    id="modalJobVacancies" class="fw-semibold text-dark">1 Post</span></li>
-                <li class="mb-2"><i class="bi bi-calendar-check text-success me-2"></i><strong>Publish Date:</strong>
-                  <span id="modalJobPublish" class="fw-semibold text-dark">30-06-2026</span>
-                </li>
-                <li class="mb-2 text-danger"><i class="bi bi-clock-history me-2"></i><strong>Application
-                    Deadline:</strong> <span id="modalJobDeadline" class="fw-semibold">25-07-2026</span></li>
-                <li class="mb-0 text-muted"><i
-                    class="bi bi-info-circle text-primary me-2"></i><strong>Eligibility:</strong> <span
-                    id="modalJobEligibility">Complies with published circular criteria</span></li>
-              </ul>
-            </div>
-
-            <!-- 2. Candidate Summary Badge -->
-            <div class="d-flex align-items-center justify-content-between p-2 mb-3 bg-white border rounded-2">
-              <div class="d-flex align-items-center gap-2">
-                <img src="assets/images/fahim.png" class="rounded-circle" width="34" height="34" alt="Avatar">
-                <div>
-                  <div class="fw-semibold small text-dark" id="modalCandidateName">Md. Fahim</div>
-                  <small class="text-muted" style="font-size: 11px;">Candidate ID: <span
-                      id="modalCandidateId">1284647</span> &bull; Profile Complete</small>
-                </div>
-              </div>
-              <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"
-                style="font-size: 11px;">
-                <i class="bi bi-shield-check me-1"></i>Verified Applicant
-              </span>
-            </div>
-
-            <!-- 3. Confirm Terms Check Area -->
-            <div class="confirm-terms-box p-3 rounded-3 border bg-light">
-              <div class="form-check m-0 d-flex align-items-center gap-2 p-0">
-                <input class="form-check-input m-0 flex-shrink-0" type="checkbox" id="confirmTermsCheck" checked>
-                <label class="form-check-label small text-secondary fw-medium mb-0" for="confirmTermsCheck">
-                  I confirm that all information in my profile is correct and complies with circular eligibility rules.
-                </label>
+          <!-- 2. Candidate Summary Badge -->
+          <div class="d-flex align-items-center justify-content-between p-2 mb-3 bg-white border rounded-2">
+            <div class="d-flex align-items-center gap-2">
+              <img src="assets/images/fahim.png" class="rounded-circle" width="34" height="34" alt="Avatar">
+              <div>
+                <div class="fw-semibold small text-dark" id="modalCandidateName">Md. Fahim</div>
+                <small class="text-muted" style="font-size: 11px;">Candidate ID: <span
+                    id="modalCandidateId">1284647</span> &bull; Profile Complete</small>
               </div>
             </div>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"
+              style="font-size: 11px;">
+              <i class="bi bi-shield-check me-1"></i>Verified Applicant
+            </span>
           </div>
 
-          <!-- 4. Modal Footer border-top bg-light -->
-          <div class="modal-footer border-top bg-light d-flex justify-content-between align-items-center w-100"
-            style="border-radius: 0 0 16px 16px;">
-            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
-              Cancel
-            </button>
-            <button type="button" class="btn btn-green-solid btn-sm" onclick="submitQuickApplication()">
-              <i class="bi bi-file-earmark-person me-1"></i> Review Profile & Apply
-            </button>
+          <!-- 3. Confirm Terms Check Area -->
+          <div class="confirm-terms-box p-3 rounded-3 border bg-light">
+            <div class="form-check m-0 d-flex align-items-center gap-2 p-0">
+              <input class="form-check-input m-0 flex-shrink-0" type="checkbox" id="confirmTermsCheck" checked>
+              <label class="form-check-label small text-secondary fw-medium mb-0" for="confirmTermsCheck">
+                I confirm that all information in my profile is correct and complies with circular eligibility rules.
+              </label>
+            </div>
           </div>
+        </div>
+
+        <!-- 4. Modal Footer border-top bg-light -->
+        <div class="modal-footer border-top bg-light d-flex justify-content-between align-items-center w-100"
+          style="border-radius: 0 0 16px 16px;">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-green-solid btn-sm" onclick="submitQuickApplication()">
+            <i class="bi bi-file-earmark-person me-1"></i> Review Profile & Apply
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/notifications.js"></script>
-    <script src="assets/js/profile-data.js"></script>
-    <script src="assets/js/recruitment-bridge.js"></script>
-    <script src="assets/js/cirpreview.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/notifications.js"></script>
+  <script src="assets/js/profile-data.js"></script>
+  <script src="assets/js/recruitment-bridge.js"></script>
+  <script src="assets/js/cirpreview.js"></script>
 
-    <!-- Dynamic Active Circulars Engine -->
-    <script>
-      let currentModalInstance = null;
-      let activeModalCircularId = null;
+  <!-- Dynamic Active Circulars Engine -->
+  <script>
+    let currentModalInstance = null;
+    let activeModalCircularId = null;
 
-      // 1. Render Active Job Circulars Dynamically from HRD Portal
-      function renderActiveCirculars() {
-        const grid = document.getElementById('circularsGrid');
-        if (!grid || !window.RecruitmentBridge) return;
+    // 1. Render Active Job Circulars Dynamically from HRD Portal
+    function renderActiveCirculars() {
+      const grid = document.getElementById('circularsGrid');
+      if (!grid || !window.RecruitmentBridge) return;
 
-        const circulars = window.RecruitmentBridge.getCirculars();
+      const circulars = window.RecruitmentBridge.getCirculars();
 
-        // Sort based on new to old (Newest first)
-        circulars.sort((a, b) => {
-          if (a.createdAt && b.createdAt && a.createdAt !== b.createdAt) {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          }
-          if (a.applyStart && b.applyStart && a.applyStart !== b.applyStart) {
-            return new Date(b.applyStart) - new Date(a.applyStart);
-          }
-          if (a.code && b.code && a.code !== b.code) {
-            return b.code.localeCompare(a.code, undefined, { numeric: true, sensitivity: 'base' });
-          }
-          return (b.id || '').localeCompare(a.id || '', undefined, { numeric: true });
-        });
+      // Sort based on new to old (Newest first)
+      circulars.sort((a, b) => {
+        if (a.createdAt && b.createdAt && a.createdAt !== b.createdAt) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+        if (a.applyStart && b.applyStart && a.applyStart !== b.applyStart) {
+          return new Date(b.applyStart) - new Date(a.applyStart);
+        }
+        if (a.code && b.code && a.code !== b.code) {
+          return b.code.localeCompare(a.code, undefined, { numeric: true, sensitivity: 'base' });
+        }
+        return (b.id || '').localeCompare(a.id || '', undefined, { numeric: true });
+      });
 
-        const countBadge = document.getElementById('totalCircularCount');
-        if (countBadge) countBadge.textContent = circulars.length;
+      const countBadge = document.getElementById('totalCircularCount');
+      if (countBadge) countBadge.textContent = circulars.length;
 
-        if (!circulars.length) {
-          grid.innerHTML = `
+      if (!circulars.length) {
+        grid.innerHTML = `
           <div class="col-12 text-center py-5">
             <div class="p-4 bg-light rounded-3 border">
               <i class="bi bi-briefcase text-muted fs-1 d-block mb-2"></i>
@@ -405,20 +406,20 @@
             </div>
           </div>
         `;
-          return;
-        }
+        return;
+      }
 
-        grid.innerHTML = circulars.map(circ => {
-          const title = circ.post || circ.title || 'Recruitment Notice';
-          const code = circ.code || 'PBPLC/HRD/REC/2026';
-          const publishDate = circ.applyStart || '2026-10-01';
-          const deadline = circ.applyEnd || '2026-11-15';
-          const isApplied = window.RecruitmentBridge.hasApplied(circ.id);
-          const isSaved = window.RecruitmentBridge.isJobSaved(circ.id);
-          const intro = circ.intro || circ.postLine || ('Click to view circular requirements and apply for ' + title + ' at Pubali Bank PLC.');
-          const vacancies = circ.vacancies ? `${circ.vacancies} ${circ.vacancies === 1 ? 'Vacancy' : 'Vacancies'}` : '';
+      grid.innerHTML = circulars.map(circ => {
+        const title = circ.post || circ.title || 'Recruitment Notice';
+        const code = circ.code || 'PBPLC/HRD/REC/2026';
+        const publishDate = circ.applyStart || '2026-10-01';
+        const deadline = circ.applyEnd || '2026-11-15';
+        const isApplied = window.RecruitmentBridge.hasApplied(circ.id);
+        const isSaved = window.RecruitmentBridge.isJobSaved(circ.id);
+        const intro = circ.intro || circ.postLine || ('Click to view circular requirements and apply for ' + title + ' at Pubali Bank PLC.');
+        const vacancies = circ.vacancies ? `${circ.vacancies} ${circ.vacancies === 1 ? 'Vacancy' : 'Vacancies'}` : '';
 
-          return `
+        return `
           <div class="col-12 col-md-6 col-xl-6 circular-card-item">
             <div class="circular-card-modern p-3 h-100 d-flex flex-column">
               <div class="d-flex align-items-start justify-content-between mb-2">
@@ -462,201 +463,201 @@
             </div>
           </div>
         `;
-        }).join('');
+      }).join('');
 
-        updateCircularCount();
+      updateCircularCount();
+    }
+
+    // Circular Details Modal Generator (from preview.js)
+    function openCircularDetailsModal(circId) {
+      if (typeof openCircularPreview === 'function') {
+        openCircularPreview(circId);
+      } else if (window.CircularPreview && window.CircularPreview.openPreviewModal) {
+        window.CircularPreview.openPreviewModal(circId);
+      } else {
+        openQuickApplyModal(circId);
+      }
+    }
+
+    // 2. Quick Apply Modal Logic
+    function openQuickApplyModal(circularIdOrTitle) {
+      if (!window.RecruitmentBridge) return;
+      const circ = window.RecruitmentBridge.getCircular(circularIdOrTitle);
+      activeModalCircularId = circ ? circ.id : circularIdOrTitle;
+
+      const title = (circ && (circ.post || circ.title)) || circularIdOrTitle;
+      const ref = (circ && circ.code) || 'PBPLC/HRD/REC/2026';
+      const publish = (circ && circ.applyStart) || '30-06-2026';
+      const deadline = (circ && circ.applyEnd) || '25-07-2026';
+      const vacancies = circ && circ.vacancies ? `${circ.vacancies} ${circ.vacancies === 1 ? 'Post' : 'Posts'}` : '1 Post';
+
+      document.getElementById('modalJobTitle').textContent = title;
+      document.getElementById('modalJobSubtitle').textContent = 'Job Circular Ref: ' + ref;
+      document.getElementById('modalJobRef').textContent = ref;
+      document.getElementById('modalJobVacancies').textContent = vacancies;
+      document.getElementById('modalJobPublish').textContent = publish;
+      document.getElementById('modalJobDeadline').textContent = deadline;
+
+      sessionStorage.setItem('modalJobTitle', title);
+      sessionStorage.setItem('selectedCircularTitle', title);
+      sessionStorage.setItem('selectedCircularId', activeModalCircularId);
+      localStorage.setItem('modalJobTitle', title);
+      localStorage.setItem('selectedCircularTitle', title);
+      localStorage.setItem('selectedCircularId', activeModalCircularId);
+
+      const profile = window.RecruitmentBridge.getApplicantProfile();
+      if (profile) {
+        const candName = document.getElementById('modalCandidateName');
+        const candId = document.getElementById('modalCandidateId');
+        if (candName) candName.textContent = profile.name;
+        if (candId) candId.textContent = profile.id;
       }
 
-      // Circular Details Modal Generator (from preview.js)
-      function openCircularDetailsModal(circId) {
-        if (typeof openCircularPreview === 'function') {
-          openCircularPreview(circId);
-        } else if (window.CircularPreview && window.CircularPreview.openPreviewModal) {
-          window.CircularPreview.openPreviewModal(circId);
-        } else {
-          openQuickApplyModal(circId);
-        }
+      const modalEl = document.getElementById('quickApplyModal');
+      currentModalInstance = new bootstrap.Modal(modalEl);
+      currentModalInstance.show();
+    }
+
+    // Direct 1-Click Apply from Modal (Instantly records in HRD candidate list)
+    function directApplyFromModal() {
+      const confirmCheck = document.getElementById('confirmTermsCheck');
+      if (confirmCheck && !confirmCheck.checked) {
+        showToast('Please confirm terms to submit application', 'warning');
+        return;
       }
 
-      // 2. Quick Apply Modal Logic
-      function openQuickApplyModal(circularIdOrTitle) {
-        if (!window.RecruitmentBridge) return;
-        const circ = window.RecruitmentBridge.getCircular(circularIdOrTitle);
-        activeModalCircularId = circ ? circ.id : circularIdOrTitle;
-
-        const title = (circ && (circ.post || circ.title)) || circularIdOrTitle;
-        const ref = (circ && circ.code) || 'PBPLC/HRD/REC/2026';
-        const publish = (circ && circ.applyStart) || '30-06-2026';
-        const deadline = (circ && circ.applyEnd) || '25-07-2026';
-        const vacancies = circ && circ.vacancies ? `${circ.vacancies} ${circ.vacancies === 1 ? 'Post' : 'Posts'}` : '1 Post';
-
-        document.getElementById('modalJobTitle').textContent = title;
-        document.getElementById('modalJobSubtitle').textContent = 'Job Circular Ref: ' + ref;
-        document.getElementById('modalJobRef').textContent = ref;
-        document.getElementById('modalJobVacancies').textContent = vacancies;
-        document.getElementById('modalJobPublish').textContent = publish;
-        document.getElementById('modalJobDeadline').textContent = deadline;
-
-        sessionStorage.setItem('modalJobTitle', title);
-        sessionStorage.setItem('selectedCircularTitle', title);
-        sessionStorage.setItem('selectedCircularId', activeModalCircularId);
-        localStorage.setItem('modalJobTitle', title);
-        localStorage.setItem('selectedCircularTitle', title);
-        localStorage.setItem('selectedCircularId', activeModalCircularId);
-
-        const profile = window.RecruitmentBridge.getApplicantProfile();
-        if (profile) {
-          const candName = document.getElementById('modalCandidateName');
-          const candId = document.getElementById('modalCandidateId');
-          if (candName) candName.textContent = profile.name;
-          if (candId) candId.textContent = profile.id;
-        }
-
-        const modalEl = document.getElementById('quickApplyModal');
-        currentModalInstance = new bootstrap.Modal(modalEl);
-        currentModalInstance.show();
+      if (!activeModalCircularId) {
+        activeModalCircularId = sessionStorage.getItem('selectedCircularId') || localStorage.getItem('selectedCircularId');
       }
 
-      // Direct 1-Click Apply from Modal (Instantly records in HRD candidate list)
-      function directApplyFromModal() {
-        const confirmCheck = document.getElementById('confirmTermsCheck');
-        if (confirmCheck && !confirmCheck.checked) {
-          showToast('Please confirm terms to submit application', 'warning');
-          return;
-        }
-
-        if (!activeModalCircularId) {
-          activeModalCircularId = sessionStorage.getItem('selectedCircularId') || localStorage.getItem('selectedCircularId');
-        }
-
-        const result = window.RecruitmentBridge.applyForCircular(activeModalCircularId);
-        if (result.success) {
-          if (currentModalInstance) {
-            currentModalInstance.hide();
-          }
-          showToast(result.message, 'success');
-          renderActiveCirculars();
-        } else {
-          showToast(result.message || 'Could not submit application', 'warning');
-        }
-      }
-
-      // Review Profile & Submit on submit.html
-      function submitQuickApplication() {
-        const confirmCheck = document.getElementById('confirmTermsCheck');
-        if (confirmCheck && !confirmCheck.checked) {
-          showToast('Please confirm terms to submit application', 'warning');
-          return;
-        }
-
-        const currentTitle = document.getElementById('modalJobTitle')?.textContent;
+      const result = window.RecruitmentBridge.applyForCircular(activeModalCircularId);
+      if (result.success) {
         if (currentModalInstance) {
           currentModalInstance.hide();
         }
+        showToast(result.message, 'success');
+        renderActiveCirculars();
+      } else {
+        showToast(result.message || 'Could not submit application', 'warning');
+      }
+    }
 
-        const url = 'submit.html?cid=' + encodeURIComponent(activeModalCircularId || '') +
-          (currentTitle ? '&title=' + encodeURIComponent(currentTitle) : '');
-        window.location.href = url;
+    // Review Profile & Submit on submit.html
+    function submitQuickApplication() {
+      const confirmCheck = document.getElementById('confirmTermsCheck');
+      if (confirmCheck && !confirmCheck.checked) {
+        showToast('Please confirm terms to submit application', 'warning');
+        return;
       }
 
-      // 3. Search Engine & Count
-      function updateCircularCount(searchTerm = '') {
-        const allCards = document.querySelectorAll('#circularsGrid .circular-card-item');
-        const totalCount = allCards.length;
-        let visibleCount = 0;
+      const currentTitle = document.getElementById('modalJobTitle')?.textContent;
+      if (currentModalInstance) {
+        currentModalInstance.hide();
+      }
 
-        allCards.forEach(card => {
-          const text = card.textContent.toLowerCase();
-          if (!searchTerm || text.includes(searchTerm)) {
-            card.style.display = '';
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
+      const url = 'submit.html?cid=' + encodeURIComponent(activeModalCircularId || '') +
+        (currentTitle ? '&title=' + encodeURIComponent(currentTitle) : '');
+      window.location.href = url;
+    }
 
-        const countBadge = document.getElementById('totalCircularCount');
-        const labelSpan = document.getElementById('totalCircularsLabel');
+    // 3. Search Engine & Count
+    function updateCircularCount(searchTerm = '') {
+      const allCards = document.querySelectorAll('#circularsGrid .circular-card-item');
+      const totalCount = allCards.length;
+      let visibleCount = 0;
 
-        if (countBadge) {
-          countBadge.textContent = searchTerm ? `${visibleCount} of ${totalCount}` : totalCount;
+      allCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (!searchTerm || text.includes(searchTerm)) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
         }
-        if (labelSpan) {
-          labelSpan.textContent = searchTerm ? 'Matching Circulars' : 'Total Circulars';
-        }
-      }
+      });
 
-      function resetCircularSearch() {
-        const searchInput = document.getElementById('dashboardSearch');
-        if (searchInput) searchInput.value = '';
-        updateCircularCount('');
-        showToast('Displaying all active circulars', 'info');
-      }
+      const countBadge = document.getElementById('totalCircularCount');
+      const labelSpan = document.getElementById('totalCircularsLabel');
 
+      if (countBadge) {
+        countBadge.textContent = searchTerm ? `${visibleCount} of ${totalCount}` : totalCount;
+      }
+      if (labelSpan) {
+        labelSpan.textContent = searchTerm ? 'Matching Circulars' : 'Total Circulars';
+      }
+    }
+
+    function resetCircularSearch() {
       const searchInput = document.getElementById('dashboardSearch');
-      if (searchInput) {
-        searchInput.addEventListener('input', function () {
-          const term = this.value.toLowerCase().trim();
-          updateCircularCount(term);
-        });
-      }
+      if (searchInput) searchInput.value = '';
+      updateCircularCount('');
+      showToast('Displaying all active circulars', 'info');
+    }
 
-      // 4. Bookmark Toggle Logic
-      function toggleBookmark(btnEl, circId) {
-        if (window.RecruitmentBridge && circId) {
-          const res = window.RecruitmentBridge.toggleSavedJob(circId);
-          const icon = btnEl.querySelector('i');
-          if (res.saved) {
-            btnEl.classList.add('saved');
-            if (icon) icon.className = 'bi bi-bookmark-heart-fill';
-            showToast('Job saved to your favourite jobs!', 'success');
-          } else {
-            btnEl.classList.remove('saved');
-            if (icon) icon.className = 'bi bi-bookmark-heart';
-            showToast('Job removed from favourite jobs', 'secondary');
-          }
+    const searchInput = document.getElementById('dashboardSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const term = this.value.toLowerCase().trim();
+        updateCircularCount(term);
+      });
+    }
+
+    // 4. Bookmark Toggle Logic
+    function toggleBookmark(btnEl, circId) {
+      if (window.RecruitmentBridge && circId) {
+        const res = window.RecruitmentBridge.toggleSavedJob(circId);
+        const icon = btnEl.querySelector('i');
+        if (res.saved) {
+          btnEl.classList.add('saved');
+          if (icon) icon.className = 'bi bi-bookmark-heart-fill';
+          showToast('Job saved to your favourite jobs!', 'success');
+        } else {
+          btnEl.classList.remove('saved');
+          if (icon) icon.className = 'bi bi-bookmark-heart';
+          showToast('Job removed from favourite jobs', 'secondary');
         }
       }
+    }
 
-      // 5. Toast Notifications
-      function showToast(message, type) {
-        const toast = document.createElement('div');
-        toast.className = `toast-notification-box alert alert-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'dark'} text-white border-0 p-3 shadow-lg`;
-        if (type === 'success') toast.style.backgroundColor = '#00b96b';
-        else if (type === 'warning') toast.style.backgroundColor = '#d97706';
-        else if (type === 'info') toast.style.backgroundColor = '#0f4c3a';
-        toast.style.position = 'fixed';
-        toast.style.top = '20px';
-        toast.style.right = '20px';
-        toast.style.zIndex = '9999';
-        toast.style.borderRadius = '10px';
-        toast.innerHTML = `<div class="d-flex align-items-center gap-2"><i class="bi bi-info-circle-fill"></i><span>${message}</span></div>`;
+    // 5. Toast Notifications
+    function showToast(message, type) {
+      const toast = document.createElement('div');
+      toast.className = `toast-notification-box alert alert-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'dark'} text-white border-0 p-3 shadow-lg`;
+      if (type === 'success') toast.style.backgroundColor = '#00b96b';
+      else if (type === 'warning') toast.style.backgroundColor = '#d97706';
+      else if (type === 'info') toast.style.backgroundColor = '#0f4c3a';
+      toast.style.position = 'fixed';
+      toast.style.top = '20px';
+      toast.style.right = '20px';
+      toast.style.zIndex = '9999';
+      toast.style.borderRadius = '10px';
+      toast.innerHTML = `<div class="d-flex align-items-center gap-2"><i class="bi bi-info-circle-fill"></i><span>${message}</span></div>`;
 
-        document.body.appendChild(toast);
-        setTimeout(() => {
-          toast.style.opacity = '0';
-          toast.style.transition = 'opacity 0.3s ease';
-          setTimeout(() => toast.remove(), 300);
-        }, 2800);
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 2800);
+    }
+
+    // Cross-Tab / Cross-Module Event Synchronization
+    window.addEventListener('erec:applicant-applied', function () {
+      renderActiveCirculars();
+    });
+    window.addEventListener('erec:db-updated', function () {
+      renderActiveCirculars();
+    });
+    window.addEventListener('storage', function (e) {
+      if (e.key === 'erec_demo_v1' || e.key === 'pubali_applicant_applied_jobs') {
+        renderActiveCirculars();
       }
+    });
 
-      // Cross-Tab / Cross-Module Event Synchronization
-      window.addEventListener('erec:applicant-applied', function () {
-        renderActiveCirculars();
-      });
-      window.addEventListener('erec:db-updated', function () {
-        renderActiveCirculars();
-      });
-      window.addEventListener('storage', function (e) {
-        if (e.key === 'erec_demo_v1' || e.key === 'pubali_applicant_applied_jobs') {
-          renderActiveCirculars();
-        }
-      });
-
-      document.addEventListener('DOMContentLoaded', function () {
-        renderActiveCirculars();
-      });
-    </script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderActiveCirculars();
+    });
+  </script>
 </body>
 
 </html>

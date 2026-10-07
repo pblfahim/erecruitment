@@ -162,7 +162,7 @@
                 refCode: circ.code,
                 appNo: app.appNo || ('PBPLC-APP-' + Math.floor(1000 + Math.random() * 9000)),
                 appliedDate: app.appliedAt ? app.appliedAt.split('T')[0] : '2026-10-06',
-                status: 'Applied / Under Scrutiny'
+                status: 'Applied'
               });
             }
           }
@@ -181,7 +181,7 @@
 
       return applied.some(function (item) {
         return (targetId && item.circularId === targetId) ||
-               (targetTitle && item.jobTitle && item.jobTitle.toLowerCase() === targetTitle.toLowerCase());
+          (targetTitle && item.jobTitle && item.jobTitle.toLowerCase() === targetTitle.toLowerCase());
       });
     },
 
@@ -212,7 +212,7 @@
         refCode: circ.code || 'PBPLC/HRD/REC/2026',
         appNo: trackingNo,
         appliedDate: today,
-        status: 'Applied / Under Scrutiny'
+        status: 'Applied'
       };
 
       // 1. Update applicant store
@@ -220,7 +220,7 @@
       try {
         var raw = localStorage.getItem(APPLICANT_APPLIED_KEY);
         if (raw) appliedList = JSON.parse(raw);
-      } catch (e) {}
+      } catch (e) { }
       appliedList.unshift(applicationEntry);
       localStorage.setItem(APPLICANT_APPLIED_KEY, JSON.stringify(appliedList));
 

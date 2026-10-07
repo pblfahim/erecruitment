@@ -632,10 +632,6 @@
               <span class="text-muted">Circular Ref:</span>
               <span class="mono fw-semibold text-secondary" id="modalConfirmRef">—</span>
             </div>
-            <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted">Tracking App No:</span>
-              <span class="badge bg-success text-white mono px-2 py-1" id="modalConfirmAppNo">—</span>
-            </div>
             <div class="d-flex justify-content-between">
               <span class="text-muted">Applicant Name:</span>
               <span class="fw-semibold text-dark" id="modalConfirmApplicant">Md. Fahim</span>
@@ -769,7 +765,6 @@
       if (result.success) {
         document.getElementById('modalConfirmJobTitle').textContent = (result.circular && (result.circular.post || result.circular.title)) || activeJobTitle;
         document.getElementById('modalConfirmRef').textContent = (result.circular && result.circular.code) || 'PBPLC/HRD/REC/2026';
-        document.getElementById('modalConfirmAppNo').textContent = result.trackingNo || 'APP-2026-001';
         if (result.candidate) {
           document.getElementById('modalConfirmApplicant').textContent = result.candidate.name;
         }

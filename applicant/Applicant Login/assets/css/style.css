@@ -1,0 +1,616 @@
+/* --- Design Tokens & Variables --- */
+:root {
+    --bg-base: #A7D7C5;
+    --bg-blob: #b9e3d8;
+    --brand-green: #006837;
+    --brand-teal: #0fa3a4;
+    --text-dark: #1a1a1a;
+    --btn-teal: #0aa299;
+    --btn-light-blue: #e8f0fe;
+    --link-blue: #0d6efd;
+}
+
+/* --- Global & Layout Styles --- */
+body {
+    font-family: 'Public Sans', 'Noto Sans Bengali', sans-serif;
+    background-color: var(--bg-base);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.bg-blobs-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    padding: 40px 15px;
+}
+
+/* --- GPU Accelerated Background Animations --- */
+@keyframes floatLeftBlob {
+    0% {
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, -45deg) scale(1);
+    }
+
+    50% {
+        transform: translate3d(40px, -35px, 0) rotate3d(0, 0, 1, -47deg) scale(1.06);
+    }
+
+    100% {
+        transform: translate3d(0, -40px, 0) rotate3d(0, 0, 1, -45deg) scale(1);
+    }
+}
+
+@keyframes floatRightBlob {
+    0% {
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 45deg) scale(1);
+    }
+
+    50% {
+        transform: translate3d(-40px, 40px, 0) rotate3d(0, 0, 1, 42deg) scale(1.06);
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 45deg) scale(1);
+    }
+}
+
+.bg-left {
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    background: #d6ece2;
+    left: -220px;
+    top: -200px;
+    border-radius: 120px;
+    transform: rotate(-45deg);
+    animation: floatLeftBlob 20s ease-in-out infinite;
+    will-change: transform;
+}
+
+.bg-right {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    background: #d8eee3;
+    right: -250px;
+    bottom: -250px;
+    border-radius: 120px;
+    transform: rotate(45deg);
+    animation: floatRightBlob 20s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* --- Card Architecture --- */
+.auth-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    border: none;
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+}
+
+/* --- Header Component --- */
+.auth-header {
+    background-color: var(--brand-green);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+}
+
+.brand-logo-fallback {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    font-size: 1.2rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.header-title-area {
+    margin-left: 10px;
+    line-height: 1.2;
+}
+
+.title-bangla {
+    font-family: 'Noto Sans Bengali', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    letter-spacing: 0.3px;
+}
+
+.title-english {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.system-tag {
+    text-align: end;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-weight: 500;
+    border-left: 2px solid rgba(226, 214, 214, 0.801);
+    padding-left: 10px;
+    margin-left: auto;
+}
+
+/* --- Form Body & Global Form Fields --- */
+.auth-body {
+    padding: 20px 40px 40px 40px;
+}
+
+.auth-body h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.account-switch-text {
+    font-size: 0.95rem;
+    color: #666666;
+    margin-bottom: 20px;
+}
+
+.account-switch-text a {
+    color: var(--link-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.account-switch-text a:hover {
+    text-decoration: underline;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444444;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    height: 50px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    color: #333333;
+}
+
+.form-control::placeholder {
+    color: #adb5bd;
+    font-size: 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-teal);
+    box-shadow: 0 0 0 0.25rem rgba(15, 163, 164, 0.15);
+}
+
+/* --- Input Group & Phone Specific Fields --- */
+.country-select-dropdown {
+    max-width: 115px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-color: #f8f9fa;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.phone-prefix {
+    height: 50px;
+    background: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+    font-weight: 600;
+    color: #444;
+    min-width: 95px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phone-prefix img {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.phone-input-field,
+.otp-input-field {
+    height: 50px;
+    border-radius: 0 8px 8px 0 !important;
+}
+
+.otp-input-field {
+    border-radius: 8px !important;
+    letter-spacing: 6px;
+    font-size: 1.25rem;
+}
+
+.input-group img {
+    width: 20px;
+    height: 14px;
+}
+
+/* --- Password Specifics --- */
+.password-container {
+    position: relative;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 10;
+    font-size: 1.05rem;
+    transition: color 0.2s;
+}
+
+.password-toggle-icon:hover {
+    color: var(--brand-teal);
+}
+
+/* --- Validation UI Hints --- */
+.form-control.is-invalid-format {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.15);
+}
+
+.validation-feedback {
+    font-size: 0.8rem;
+    color: #dc3545;
+    margin-top: 4px;
+    display: none;
+}
+
+/* --- Animation Utilities --- */
+.transition-block {
+    transition: all 0.4s ease-in-out;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.transition-block.show {
+    max-height: 150px;
+    opacity: 1;
+    margin-top: 16px;
+}
+
+/* --- Interactive Action Button --- */
+.btn-signin {
+    background: #adb5bd;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    height: 52px;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all .3s ease, transform 0.1s;
+    cursor: not-allowed;
+}
+
+.btn-signin:disabled {
+    background: #adb5bd;
+    color: #fff;
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+.btn-signin.active {
+    background-color: var(--brand-teal);
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-signin.active:hover {
+    background-color: #0d8c8d;
+}
+
+.btn-signin:active {
+    transform: scale(0.99);
+}
+
+.btn-change {
+    color: var(--bs-secondary-color);
+}
+
+.btn-change:hover {
+    color: #0d8c8d;
+}
+
+/* Ensuring perfect password container sizing with relative layout */
+.password-container {
+    position: relative;
+}
+
+/* Card Body Customization */
+.card-body-custom {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+/* 3D-styled Congratulations Banner */
+.congrats-banner {
+    background-color: #fff4f2;
+    border-radius: 50px;
+    padding: 12px 30px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.congrats-text-3d {
+    margin-top: -35px;
+}
+
+.status-description {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Buttons Styling */
+.btn-view-dashboard {
+    background-color: var(--btn-light-blue);
+    color: #2b70e4;
+    font-size: 1rem;
+    font-weight: 600;
+    /* width: 100%; */
+    border-radius: 8px;
+    height: 52px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-view-dashboard:hover {
+    background-color: #d2e3fc;
+    color: #1a57c1;
+}
+
+.btn-create-profile {
+    background-color: var(--btn-teal);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    /* width: 100%; */
+    border-radius: 8px;
+    height: 52px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-create-profile:hover {
+    background-color: #088a82;
+    color: #ffffff;
+}
+
+
+.password-toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+    color: #6c757d;
+}
+
+.password-container .form-control {
+    padding-right: 40px;
+}
+
+/* Styling for smooth validation transitions */
+.form-control.is-valid,
+.form-control.is-invalid {
+    background-image: none !important;
+    /* Remove default bootstrap check icons to avoid icon overlapping */
+}
+
+.btn-signin:not(:disabled) {
+    cursor: pointer;
+    opacity: 1;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: #ffffff;
+    border-top: 1px solid #eef2f5;
+    padding: 14px 24px;
+    font-size: 0.8rem;
+    color: #555555;
+    z-index: 10;
+    width: 100%;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   --- Fully Responsive Viewports (Tablets & Mobile) ---
+   ========================================================================== */
+
+/* --- Tablet Devices (Large screens to Portrait Tablets) --- */
+@media (max-width: 1024px) {
+    .bg-left {
+        width: 480px;
+        height: 480px;
+        left: -180px;
+        top: -150px;
+    }
+
+    .bg-right {
+        width: 520px;
+        height: 520px;
+        right: -180px;
+        bottom: -180px;
+    }
+
+    .auth-body {
+        padding: 30px 32px 35px 32px;
+    }
+}
+
+/* --- Small Tablets & Large Phones --- */
+@media (max-width: 768px) {
+    .bg-blobs-container {
+        display: none;
+        /* Disables CPU/GPU load from heavy rotating animations on medium screens */
+    }
+
+    .main-content {
+        padding: 30px 80px;
+    }
+
+    .auth-card {
+        border-radius: 28px;
+    }
+
+    /* --- Header Component --- */
+    .auth-header {
+        padding: 16px 22px;
+    }
+
+    .auth-body {
+        padding: 30px 24px;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+/* --- Standard & Small Mobile Devices (e.g., iPhones, Pixels, Galaxy) --- */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 20px 15px;
+        align-items: flex-start;
+        /* Prevents awkward clipping on short mobile screens in landscape */
+    }
+
+    .auth-card {
+        align-self: center;
+        border-radius: 20px;
+        /* Softer, native-app feel on small devices */
+    }
+
+    .auth-header {
+        padding: 20px;
+    }
+
+    .brand-logo-fallback {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+
+    .title-bangla {
+        font-size: 1.15rem;
+    }
+
+    .title-english {
+        font-size: 0.85rem;
+    }
+
+    .system-tag {
+        font-size: 0.8rem;
+        text-align: justify;
+        border-left: none;
+    }
+
+    .auth-body {
+        padding: 24px 20px 28px 20px;
+        /* Maximizes lateral space for form inputs */
+    }
+
+    .auth-body h2 {
+        font-size: 1.65rem;
+        /* Scales down from 2rem to prevent text wrapping issues */
+        margin-bottom: 4px;
+    }
+
+    .account-switch-text {
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+    }
+
+    /* Streamlining form fields for thumb-tap interactions */
+    .form-control,
+    .country-select-dropdown,
+    .phone-prefix {
+        height: 46px;
+        font-size: 0.92rem;
+    }
+
+    .otp-input-field {
+        font-size: 1.15rem;
+        letter-spacing: 4px;
+        /* Slightly tighter spacing to fit small displays perfectly */
+    }
+
+    .btn-signin {
+        height: 48px;
+        margin-top: 24px;
+        font-size: 0.95rem;
+    }
+
+    footer {
+        padding: 16px 20px;
+        font-size: 0.75rem;
+    }
+}

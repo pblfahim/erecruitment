@@ -1,0 +1,262 @@
+/* --- Basic Information Page --- */
+
+:root {
+  --brand-primary: #0f4c3a;
+  /* Deep Banking Emerald */
+  --brand-accent: #10b981;
+  /* Modern Vibrant Green */
+  --brand-accent-hover: #059669;
+  --bg-main: #f4f7f6;
+  /* Ultra-light medical/finance gray-green tint */
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  /* Deep Slate */
+  --text-muted: #64748b;
+  /* Cool Slate Muted */
+  --border-color: #e2e8f0;
+  /* Subtle Border */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.2s ease-in-out;
+}
+
+body {
+  background: var(--bg-main);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--text-main);
+  font-size: 0.925rem;
+}
+
+/* --- Master Grid Structure for Fixed Sidebar --- */
+.dash-wrapper {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* --- Sidebar Styles --- */
+.sidebar {
+  background: var(--bg-card);
+  width: 260px;
+  flex-shrink: 0;
+  /* Prevents sidebar from compressing */
+  border-right: 1px solid var(--border-color);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+/* --- Main Content Layout --- */
+.main-content {
+  flex-grow: 1;
+  width: calc(100% - 260px);
+  display: flex;
+  flex-column: column;
+  min-height: 100vh;
+}
+
+@media (max-width: 991.98px) {
+  .main-content {
+    width: 100%;
+  }
+}
+
+.logo-wrapper {
+  text-align: center;
+  padding: 0 24px;
+  height: 80px;
+  /* Matches navbar height perfectly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Ensure the SVG logo scales fluidly without breaking aspect ratio */
+.logo-wrapper img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
+
+.logo-title {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  color: var(--brand-primary) !important;
+}
+
+.profile-card {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #e6f4ea 100%);
+  margin: 20px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.profile-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nav-link-custom {
+  color: var(--text-muted);
+  padding: 10px 20px;
+  margin: 2px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.nav-link-custom i {
+  font-size: 1.1rem;
+  margin-right: 12px;
+}
+
+.nav-link-custom:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-link-custom.active {
+  background: var(--brand-primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(15, 76, 58, 0.15);
+}
+
+/* Distinct look for the critical logout element action option */
+.nav-link-logout {
+  background-color: rgb(196, 194, 191);
+  color: #000000;
+  border-top: 1px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.nav-link-logout:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* --- Navbar Overhaul --- */
+.navbar {
+  height: 80px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 0 24px !important;
+  /* Matches the exact padding alignment layout of logo-wrapper */
+}
+
+.search-container {
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-container i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.search-input {
+  width: 100%;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  padding-left: 40px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  height: 46px;
+}
+
+.search-input:focus {
+  background: #fff;
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.nav-icon-btn {
+  height: 42px;
+  width: 42px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 8px;
+  border-radius: 10%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon-btn:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+
+/* --- App Footer Component Styling --- */
+.dash-footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 15px 24px;
+  margin-top: auto;
+  /* Drives footer container straight down when viewport data height scale drops short */
+}
+
+/* --- Responsive Layout Rules --- */
+
+/* Tablets & Small Desktops (Up to 1200px) */
+@media (max-width: 1200px) {
+  .profile-card {
+    margin: 20px 20px;
+  }
+
+  .nav-link-custom {
+    margin: 4px 20px;
+  }
+
+  .nav-link-logout {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .logo-wrapper {
+    padding: 0 16px;
+  }
+
+  .navbar {
+    padding: 0 16px !important;
+  }
+
+  .dash-footer {
+    padding: 20px 16px;
+  }
+}
+
+/* Large Tablets & Mobile Screens (Up to 991px) */
+@media (max-width: 991px) {
+  .navbar {
+    height: 70px;
+  }
+
+  .search-input {
+    height: 40px;
+  }
+}
+
+/* Tiny Mobile Devices (Down to 425px) */
+@media (max-width: 425px) {
+  .search-container {
+    max-width: 160px;
+  }
+}

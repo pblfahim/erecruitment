@@ -1,0 +1,284 @@
+/* --- Basic Information Page --- */
+
+:root {
+    --brand-primary: #0F4C3A;
+    /* Deep Banking Emerald */
+    --brand-accent: #10B981;
+    /* Modern Vibrant Green */
+    --brand-accent-hover: #059669;
+    --bg-main: #F4F7F6;
+    /* Ultra-light medical/finance gray-green tint */
+    --bg-card: #FFFFFF;
+    --text-main: #0F172A;
+    /* Deep Slate */
+    --text-muted: #64748B;
+    /* Cool Slate Muted */
+    --border-color: #E2E8F0;
+    /* Subtle Border */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --transition: all 0.2s ease-in-out;
+}
+
+body {
+    background: var(--bg-main);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-main);
+    font-size: 0.925rem;
+}
+
+/* --- Sidebar & Offcanvas Styles --- */
+.sidebar {
+    background: var(--bg-card);
+    min-height: 100vh;
+    border-right: 1px solid var(--border-color);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
+}
+
+.logo-wrapper {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo-title {
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    color: var(--brand-primary) !important;
+}
+
+.profile-card {
+    padding: 20px 16px;
+    background: linear-gradient(135deg, #F0FDF4 0%, #E6F4EA 100%);
+    margin: 20px 36px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.profile-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nav-link-custom {
+    color: var(--text-muted);
+    padding: 12px 20px;
+    margin: 4px 36px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.nav-link-custom i {
+    font-size: 1.1rem;
+    margin-right: 12px;
+}
+
+.nav-link-custom:hover {
+    background: #F1F5F9;
+    color: var(--text-main);
+}
+
+.nav-link-custom.active {
+    background: var(--brand-primary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(15, 76, 58, 0.15);
+}
+
+/* --- Navbar Overhaul --- */
+.navbar {
+    height: 70px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.search-container {
+    position: relative;
+    max-width: 300px;
+    width: 100%;
+}
+
+.search-container i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.search-input {
+    background: #F1F5F9;
+    border: 1px solid transparent;
+    padding-left: 40px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    height: 40px;
+}
+
+.search-input:focus {
+    background: #fff;
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.nav-icon-btn {
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 8px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon-btn:hover {
+    background: #F1F5F9;
+    color: var(--text-main);
+}
+
+/* --- Custom Responsive Nav Tabs --- */
+.card-header-tabs-custom {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border-color);
+    background: #FCFDFE;
+    scrollbar-width: none;
+    /* Hide scrollbar for Chrome/Safari/Firefox */
+}
+
+.card-header-tabs-custom::-webkit-scrollbar {
+    display: none;
+}
+
+.card-header-tabs-custom .tab-item {
+    color: var(--text-muted);
+    border: none;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 0.875rem;
+}
+
+.card-header-tabs-custom .tab-item:hover {
+    background: #F1F5F9;
+    color: var(--text-main);
+}
+
+.card-header-tabs-custom .tab-item.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--brand-accent-hover);
+    font-weight: 600;
+}
+
+/* --- Main Content & Forms --- */
+.main-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03);
+}
+
+.section-title {
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.3px;
+    position: relative;
+    padding-left: 12px;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    background: var(--brand-accent);
+    border-radius: 2px;
+}
+
+.address-sub-box {
+    background: #FAFCFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    height: 100%;
+}
+
+/* --- Form Floating Customization --- */
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-select~label {
+    color: var(--brand-accent-hover);
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+    font-weight: 600;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+}
+
+.form-check-input:checked {
+    background-color: var(--brand-accent);
+    border-color: var(--brand-accent);
+}
+
+/* --- Buttons --- */
+.btn-custom {
+    height: 46px;
+    padding: 0 24px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.btn-success-custom {
+    background: var(--brand-accent);
+    color: #fff;
+    border: none;
+}
+
+.btn-success-custom:hover {
+    background: var(--brand-accent-hover);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.btn-outline-secondary-custom {
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    background: transparent;
+}
+
+.btn-outline-secondary-custom:hover {
+    background: #F1F5F9;
+    color: var(--text-main);
+    border-color: #CBD5E1;
+}

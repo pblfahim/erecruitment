@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HRD Portal | Pubali Bank PLC E-Recruitment</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/icon.png" sizes="32x32" />
+
+  <!-- Local Roboto Font -->
+  <link rel="stylesheet" href="assets/vendor/roboto/roboto.css" />
+
+  <!-- Local Vendor CSS Libraries -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/all.min.css" />
+  <link href="assets/vendor/datatables/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
+  <!-- Custom Dashboard & Print Stylesheets -->
+  <link href="assets/css/app.css" rel="stylesheet">
+  <link href="assets/css/print.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- PRIMARY SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Brand / Bank Logo -->
+      <div class="sidebar-brand">
+        <div class="logo-wrapper">
+          <img src="assets/images/pbplc.svg" alt="Pubali Bank PLC Logo" />
+        </div>
+      </div>
+
+      <!-- Active User Profile Summary Card -->
+      <div class="profile-card text-center" id="sidebar-profile-card">
+        <span class="avatar profile-img primary mx-auto mb-2" id="sidebar-user-avatar"></span>
+        <h6 class="fw-bold mb-1" id="sidebar-user-name" style="color: var(--brand-primary)">&nbsp;</h6>
+        <span class="badge bg-white text-success border px-2 py-1" id="sidebar-user-role"
+          style="font-size: 0.72rem; font-weight: 600">
+          HR Admin &middot; Senior Officer
+        </span>
+      </div>
+
+      <!-- Navigation Menu Items -->
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+
+      <!-- Sidebar Footer / Demo State Management -->
+      <div class="sidebar-foot">
+        <a href="applicant/index.html" class="btn btn-sm btn-light border w-100 fw-semibold mb-2 d-flex align-items-center justify-content-center gap-1 text-dark" id="btn-sidebar-applicant-portal" title="Switch to Applicant Portal">
+          <i class="bi bi-box-arrow-up-right text-success"></i> <span>Applicant Portal</span>
+        </a>
+        <button class="btn btn-sm btn-outline-success btn-reset-demo w-100 fw-semibold" id="btn-reset-demo">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> Reset demo data
+        </button>
+        <div class="sidebar-note" id="storage-note"></div>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <div class="main-wrap">
+      <!-- TOP NAVBAR -->
+      <header class="topbar sticky-top">
+        <div class="d-flex align-items-center w-100 justify-content-between">
+          <!-- Left Utilities: Mobile Drawer Trigger, Desktop Sidebar Expand Hamburger, & Breadcrumbs -->
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-light d-lg-none nav-icon-btn" id="btn-sidebar-toggle" type="button"
+              title="Toggle Navigation">
+              <i class="bi bi-list fs-4"></i>
+            </button>
+            <button class="btn btn-light nav-icon-btn d-none" id="btn-sidebar-desktop-toggle" type="button"
+              title="Expand Sidebar" aria-label="Expand Sidebar">
+              <i class="bi bi-list fs-4 text-dark"></i>
+            </button>
+            <nav class="crumbs ms-2 d-none d-sm-flex" id="crumbs"></nav>
+          </div>
+
+          <!-- Right Utilities: Notification Center & Acting User Role-Switcher -->
+          <div class="topbar-right d-flex align-items-center gap-3" id="topbar-right"></div>
+        </div>
+      </header>
+
+      <!-- DYNAMIC ROUTED VIEW CANVAS -->
+      <main class="view" id="view"></main>
+    </div>
+
+    <!-- Mobile Drawer Backdrop -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  </div>
+
+  <!-- TOAST & MODAL HOST CONTAINERS -->
+  <div class="toast-container position-fixed end-0 p-3" id="toast-host"></div>
+  <div id="modal-host"></div>
+  <div id="drawer-host"></div>
+
+  <!-- Local Bootstrap 5.3.3 Bundle & Vendor Libraries -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/datatables/dataTables.min.js"></script>
+  <script src="assets/vendor/datatables/dataTables.bootstrap5.min.js"></script>
+
+  <!-- Application Core Libraries -->
+  <script src="assets/js/fmt.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/seed.js"></script>
+  <script src="assets/js/pipeline.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/export.js"></script>
+  <script src="assets/js/router.js"></script>
+
+  <!-- Pipeline View Handlers -->
+  <script src="assets/js/pages/dashboard.js"></script>
+  <script src="assets/js/pages/jobcirculars.js"></script>
+  <script src="assets/js/pages/createcircular/basic.js"></script>
+  <script src="assets/js/pages/createcircular/eligibility.js"></script>
+  <script src="assets/js/pages/createcircular/approval.js"></script>
+  <script src="assets/js/pages/createcircular/preview.js"></script>
+  <script src="assets/js/pages/newcircular.js"></script>
+  <script src="assets/js/pages/circularstages/applicantlist.js"></script>
+  <script src="assets/js/pages/circularstages/approvecandidate.js"></script>
+  <script src="assets/js/pages/circularstages/rollcreate.js"></script>
+  <script src="assets/js/pages/circularstages/seatplan.js"></script>
+  <script src="assets/js/pages/circularstages/seatplanapprove.js"></script>
+  <script src="assets/js/pages/circularstages/examinstructions.js"></script>
+  <script src="assets/js/pages/circularstages/examnotice.js"></script>
+  <script src="assets/js/pages/createcircular/scrutiny.js"></script>
+  <script src="assets/js/pages/circularstages/marks.js"></script>
+  <script src="assets/js/pages/circularstages/result.js"></script>
+  <script src="assets/js/pages/circularstages/offerletter.js"></script>
+  <script src="assets/js/pages/circularstages/joining.js"></script>
+  <script src="assets/js/pages/pendingapproval.js"></script>
+  <script src="assets/js/pages/outbox.js"></script>
+  <script src="assets/js/pages/print.js"></script>
+
+  <!-- App Boot Initialization -->
+  <script src="assets/js/app.js"></script>
+</body>
+
+</html>

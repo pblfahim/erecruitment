@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Favourite Jobs | Pubali Bank PLC E-Recruitment</title>
+
+  <!-- FAVICON & FONTS -->
+  <link rel="icon" type="image/png" href="/assets/images/icon.png" sizes="32x32" />
+  <link rel="stylesheet" href="assets/vendor/roboto/roboto.css" />
+
+  <!-- VENDOR STYLES -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/vendor/font-awesome/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/applicantdash.css" />
+</head>
+
+<body>
+  <div class="dash-wrapper">
+
+    <!-- DESKTOP SIDEBAR -->
+    <div class="sidebar d-none d-lg-flex flex-column justify-content-between">
+      <div>
+        <div class="logo-wrapper">
+          <img src="assets/images/pbplc.svg" alt="Pubali Logo" style="max-width: 180px; width: 100%; height: auto" />
+        </div>
+
+        <div class="profile-card text-center">
+          <img src="assets/images/fahim.png" class="rounded-circle profile-img mb-2" alt="User profile" />
+          <h6 class="fw-bold mb-1" style="color: var(--brand-primary)">Md. Fahim</h6>
+          <span class="badge bg-white text-success border px-2 py-1" style="font-size: 0.75rem; font-weight: 600">
+            ID : 1284647
+          </span>
+        </div>
+
+        <div class="d-flex flex-column">
+          <a class="nav-link-custom" href="index.html"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+          <a class="nav-link-custom" href="documents.html"><i class="bi bi-person-vcard"></i> Profile</a>
+
+          <a class="nav-link-custom" href="resume.html"><i class="bi bi-file-earmark-person"></i> View Resume</a>
+          <a class="nav-link-custom" href="active-circular.html"><i class="bi bi-briefcase"></i> Active
+            Circular</a>
+          <a class="nav-link-custom" href="applied-jobs.html"><i class="bi bi-briefcase"></i> Applied Jobs</a>
+          <a class="nav-link-custom active" href="favourite-jobs.html"><i class="bi bi-bookmark-heart"></i> Favourite
+            Jobs</a>
+          <a class="nav-link-custom" href="settings.html"><i class="bi bi-shield-lock"></i> Settings</a>
+        </div>
+      </div>
+
+      <div>
+        <a class="nav-link-custom nav-link-logout" href="#">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+      </div>
+    </div>
+
+    <!-- MOBILE DRAWER -->
+    <div class="offcanvas offcanvas-start w-100" id="mobileSidebar" tabindex="-1"
+      style="max-width: var(--sidebar-width);">
+      <div class="d-flex flex-column justify-content-between h-100">
+        <div>
+          <div class="offcanvas-header border-bottom">
+            <img src="assets/images/pbplc.svg" alt="Pubali Logo" style="max-width: 180px; width: 100%; height: auto" />
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+          </div>
+
+          <div class="offcanvas-body p-0">
+            <div class="profile-card text-center my-3 mx-3">
+              <img src="assets/images/fahim.png" class="rounded-circle profile-img mb-2" alt="User profile" />
+              <h6 class="fw-bold mb-1" style="color: var(--brand-primary)">Md. Fahim</h6>
+              <span class="badge bg-white text-success border px-2 py-1" style="font-size: 0.75rem; font-weight: 600">
+                ID : 1284647
+              </span>
+            </div>
+
+            <div class="d-flex flex-column">
+              <a class="nav-link-custom" href="index.html"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+              <a class="nav-link-custom" href="basicinfo.html"><i class="bi bi-person-vcard"></i> Profile</a>
+
+              <a class="nav-link-custom" href="resume.html"><i class="bi bi-file-earmark-person"></i> View Resume</a>
+              <a class="nav-link-custom" href="active-circular.html"><i class="bi bi-briefcase"></i> Active
+                Circular</a>
+              <a class="nav-link-custom" href="applied-jobs.html"><i class="bi bi-briefcase"></i> Applied Jobs</a>
+              <a class="nav-link-custom active" href="favourite-jobs.html"><i class="bi bi-bookmark-heart"></i>
+                Favourite Jobs</a>
+              <a class="nav-link-custom" href="settings.html"><i class="bi bi-shield-lock"></i> Settings</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-0">
+          <a class="nav-link-custom nav-link-logout" href="#">
+            <i class="bi bi-box-arrow-left"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content d-flex flex-column">
+      <!-- NAVBAR -->
+      <nav class="navbar sticky-top bg-white border-bottom px-4 py-2">
+        <div class="d-flex align-items-center w-100 justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-light d-lg-none input-group-text nav-icon-btn" type="button"
+              data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+              <i class="bi bi-list fs-4"></i>
+            </button>
+            <div class="search-container d-none d-sm-block position-relative">
+              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+              <input class="form-control search-input ps-5" type="search" placeholder="Search saved circulars..."
+                id="dashboardSearch" style="border-radius: 20px; min-width: 260px" />
+            </div>
+          </div>
+
+          <!-- Right Utilities: Interactive Notifications Dropdown & Profile -->
+          <div class="d-flex align-items-center gap-3">
+
+            <!-- Interactive Notification Center -->
+            <div class="dropdown">
+              <button class="position-relative nav-icon-btn cursor-pointer" type="button" id="notificationDropdownBtn"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-bell fs-5"></i>
+                <span
+                  class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
+                  id="unreadBadgeDot"></span>
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-end notification-menu-dropdown p-0 mt-2"
+                aria-labelledby="notificationDropdownBtn">
+                <div class="p-3 bg-light border-bottom d-flex align-items-center justify-content-between">
+                  <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;">
+                    <i class="bi bi-bell-fill text-success me-1"></i> Notifications
+                    <span class="badge bg-danger rounded-pill ms-1" id="notificationCountBadge">3</span>
+                  </h6>
+                  <button class="btn btn-link btn-sm text-decoration-none p-0 text-success fw-semibold"
+                    style="font-size: 0.75rem;" onclick="markAllNotificationsRead()">
+                    Mark all read
+                  </button>
+                </div>
+
+                <div class="notification-list" style="max-height: 320px; overflow-y: auto;">
+                  <div class="notification-item unread d-flex align-items-start gap-2" onclick="readNotification(this)">
+                    <div class="bg-success-subtle text-success p-2 rounded-circle flex-shrink-0"
+                      style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                      <i class="bi bi-file-earmark-check"></i>
+                    </div>
+                    <div>
+                      <h6 class="fw-semibold mb-0 text-dark" style="font-size: 0.82rem;">Admit Card Released</h6>
+                      <p class="text-muted mb-0 small" style="font-size: 0.75rem;">Senior Officer (IT) exam on 15 Aug
+                        2026. Download now.</p>
+                      <small class="text-secondary" style="font-size: 0.68rem;">10 mins ago</small>
+                    </div>
+                  </div>
+
+                  <div class="notification-item unread d-flex align-items-start gap-2" onclick="readNotification(this)">
+                    <div class="bg-warning-subtle text-warning p-2 rounded-circle flex-shrink-0"
+                      style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                      <i class="bi bi-exclamation-circle"></i>
+                    </div>
+                    <div>
+                      <h6 class="fw-semibold mb-0 text-dark" style="font-size: 0.82rem;">Profile Update Notice</h6>
+                      <p class="text-muted mb-0 small" style="font-size: 0.75rem;">Keep your profile information and
+                        documents updated.</p>
+                      <small class="text-secondary" style="font-size: 0.68rem;">1 day ago</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-2 text-center bg-light border-top">
+                  <a href="job-alerts.html" class="small text-decoration-none text-muted fw-semibold">View All
+                    Notifications</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="vr my-2 text-secondary opacity-25" style="height: 24px"></div>
+
+            <div class="dropdown">
+              <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2"
+                data-bs-toggle="dropdown">
+                <img src="assets/images/fahim.png" class="rounded-circle" width="36" height="36" alt="Avatar" />
+                <span class="d-none d-md-inline fw-semibold text-dark">Md. Fahim</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                <li><a class="dropdown-menu-item dropdown-item" href="basicinfo.html"><i class="bi bi-person me-2"></i>
+                    Edit Profile</a></li>
+                <li><a class="dropdown-menu-item dropdown-item" href="resume.html"><i
+                      class="bi bi-file-earmark-person me-2"></i> View Resume</a></li>
+                <li><a class="dropdown-menu-item dropdown-item" href="settings.html"><i class="bi bi-gear me-2"></i>
+                    Settings</a></li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li><a class="dropdown-menu-item dropdown-item text-danger" href="#"><i
+                      class="bi bi-box-arrow-left me-2"></i> Logout</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- DYNAMIC CONTAINER -->
+      <div class="overflow-hidden pt-3">
+        <div class="container form-container mb-3">
+          <div class="container-fluid px-2 px-md-3">
+            <div class="row g-4">
+
+              <!-- FAVOURITE JOB CIRCULARS -->
+              <div class="col-12" id="circularsSection">
+                <div class="card border-0 shadow-sm p-4">
+                  <div
+                    class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom flex-wrap gap-2">
+                    <div>
+                      <h5 class="fw-bold text-dark mb-1"><i class="bi bi-bookmark-heart-fill text-success me-2"></i> Favourite
+                        Job Circulars</h5>
+                      <p class="text-muted mb-0 small">Keep track of bookmarked circulars and apply before application closing dates</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge bg-purple-subtle text-purple px-3 py-2 fw-semibold"
+                        style="color: #6d28d9; background-color: #f5f3ff;" id="savedCircularsCountBadge">3 Circulars Bookmarked</span>
+                      <a href="active-circular.html" class="btn btn-outline-success btn-sm fw-semibold">View All
+                        Circulars</a>
+                    </div>
+                  </div>
+
+                  <div class="row g-3" id="circularsGrid">
+
+                    <!-- Circular Item 1 -->
+                    <div class="col-12 col-md-6 col-xl-6 circular-card-item">
+                      <div class="circular-card-modern p-3">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                          <h6 class="fw-bold text-dark mb-2">Management Trainee Officer (MTO)
+                          </h6>
+                          <button type="button" class="bookmark-btn-toggle saved" onclick="toggleBookmark(this)"
+                            title="Remove from Favourites"><i class="bi bi-bookmark-heart-fill"></i>
+                          </button>
+                        </div>
+                        <p class="small text-secondary mb-3">Click on the circular button to download the circular and
+                          click on the Apply button to apply for the position of Management Trainee Officer (MTO).</p>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                          <span class="text-success small">Date of Publish : 25-06-2026</span>
+                          <span class="text-danger small">Last Date : 25-08-2026</span>
+                        </div>
+                        <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                          <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf"></i>
+                            Circular</a>
+                          <button class="btn btn-green-solid btn-sm"
+                            onclick="openQuickApplyModal('Management Trainee Officer (MTO)')">Apply
+                            Now</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Circular Item 2 -->
+                    <div class="col-12 col-md-6 col-xl-6 circular-card-item">
+                      <div class="circular-card-modern p-3">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                          <h6 class="fw-bold text-dark mb-2">Probationary Officer
+                          </h6>
+                          <button type="button" class="bookmark-btn-toggle saved" onclick="toggleBookmark(this)"
+                            title="Remove from Favourites"><i class="bi bi-bookmark-heart-fill"></i>
+                          </button>
+                        </div>
+                        <p class="small text-secondary mb-3">Click on the circular button to download the circular and
+                          click on the Apply button to apply for the position of Probationary Officer for general banking operations.</p>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                          <span class="text-success small">Date of Publish : 20-06-2026</span>
+                          <span class="text-danger small">Last Date : 30-08-2026</span>
+                        </div>
+                        <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                          <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf"></i>
+                            Circular</a>
+                          <button class="btn btn-green-solid btn-sm"
+                            onclick="openQuickApplyModal('Probationary Officer')">Apply
+                            Now</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Circular Item 3 -->
+                    <div class="col-12 col-md-6 col-xl-6 circular-card-item">
+                      <div class="circular-card-modern p-3">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                          <h6 class="fw-bold text-dark mb-2">Head of Information Security
+                          </h6>
+                          <button type="button" class="bookmark-btn-toggle saved" onclick="toggleBookmark(this)"
+                            title="Remove from Favourites"><i class="bi bi-bookmark-heart-fill"></i>
+                          </button>
+                        </div>
+                        <p class="small text-secondary mb-3">Click on the circular button to download the circular and
+                          click on the Apply button to apply for the position of Head of Information Security in Executive ICT Grade.</p>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                          <span class="text-success small">Date of Publish : 10-06-2026</span>
+                          <span class="text-danger small">Last Date : 10-08-2026</span>
+                        </div>
+                        <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                          <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf"></i>
+                            Circular</a>
+                          <button class="btn btn-green-solid btn-sm"
+                            onclick="openQuickApplyModal('Head of Information Security')">Apply
+                            Now</button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="dash-footer bg-white border-top mt-auto">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+          <div>
+            <span class="small text-secondary">© 2026 <strong>Pubali Bank PLC.</strong> All rights reserved.</span>
+          </div>
+          <div class="d-flex gap-3">
+            <a href="#" class="text-decoration-none text-secondary small">Privacy Policy</a>
+            <a href="#" class="text-decoration-none text-secondary small">Terms of Service</a>
+            <a href="#" class="text-decoration-none text-secondary small">Support</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- QUICK APPLY MODAL -->
+  <div class="modal fade" id="quickApplyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+        <div class="modal-header border-bottom bg-light" style="border-radius: 16px 16px 0 0;">
+          <div>
+            <h5 class="fw-bold text-dark mb-0" id="modalJobTitle">Apply for Position</h5>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body p-4">
+
+          <!-- 1. Job details frame -->
+          <div class="card border-0 shadow-sm p-3 mb-3 position-relative quick-apply-job-frame">
+            <ul class="list-unstyled text-secondary small mb-0 flex-grow-1 cir-small">
+              <li class="mb-2"><i class="bi bi-award text-success me-2"></i><strong>Position:</strong> Trainee Assistant
+                Junior Officer</li>
+              <li class="mb-2"><i class="bi bi-award text-success me-2"></i><strong>Age limit:</strong> Not over 32
+                years as on 31 May 2026. No affidavit in respect of age will be
+                acceptable.</li>
+              <li class="mb-2"><i class="bi bi-mortarboard text-success me-2"></i><strong>Degree:</strong> M.Sc /
+                B.Sc / MBA (Min CGPA 3.00)</li>
+              <li class="mb-2"><i class="bi bi-mortarboard text-success me-2"></i><strong>Experience:</strong> At least
+                02 (two) years of professional experience in the relevant field as on 31.05.2026.
+              </li>
+              <li class="mb-0 text-danger"><i class="bi bi-clock-history me-2"></i><strong>Deadline:</strong> 25th
+                August 2026</li>
+            </ul>
+          </div>
+
+          <!-- 2. Confirm Terms Check Area -->
+          <div class="confirm-terms-box p-3 rounded-3 border bg-light">
+            <div class="form-check m-0 d-flex align-items-center gap-2 p-0">
+              <input class="form-check-input m-0 flex-shrink-0" type="checkbox" id="confirmTermsCheck">
+              <label class="form-check-label small text-secondary fw-medium mb-0" for="confirmTermsCheck">
+                I confirm that all information in my profile is correct and complies with circular rules.
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4. Modal Footer border-top bg-light -->
+        <div class="modal-footer border-top bg-light d-flex justify-content-end align-items-center w-100"
+          style="border-radius: 0 0 16px 16px;">
+          <button type="button" class="btn btn-green-solid btn-sm" onclick="submitQuickApplication()">
+            Review & Submit Application <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/notifications.js"></script>
+  <script src="assets/js/recruitment-bridge.js"></script>
+
+  <script>
+    // 1. Bookmark Toggle Logic
+    function toggleBookmark(btnEl) {
+      const isSaved = btnEl.classList.contains('saved');
+      const icon = btnEl.querySelector('i');
+      const badge = document.getElementById('savedCircularsCountBadge');
+
+      if (isSaved) {
+        btnEl.classList.remove('saved');
+        if (icon) icon.className = 'bi bi-bookmark-heart';
+        showToast('Job removed from favourite jobs', 'secondary');
+      } else {
+        btnEl.classList.add('saved');
+        if (icon) icon.className = 'bi bi-bookmark-heart-fill';
+        showToast('Job saved to your favourite jobs!', 'success');
+      }
+
+      const activeSaved = document.querySelectorAll('.bookmark-btn-toggle.saved').length;
+      if (badge) {
+        badge.textContent = `${activeSaved} Circular${activeSaved === 1 ? '' : 's'} Bookmarked`;
+      }
+    }
+
+    // 2. Quick Apply Modal Logic
+    let currentModalInstance = null;
+
+    function openQuickApplyModal(title) {
+      document.getElementById('modalJobTitle').textContent = title;
+      sessionStorage.setItem('modalJobTitle', title);
+      sessionStorage.setItem('selectedCircularTitle', title);
+      localStorage.setItem('modalJobTitle', title);
+      localStorage.setItem('selectedCircularTitle', title);
+
+      const modalEl = document.getElementById('quickApplyModal');
+      currentModalInstance = new bootstrap.Modal(modalEl);
+      currentModalInstance.show();
+    }
+
+    function viewCvResume() {
+      showToast('Opening CV/Resume preview...', 'info');
+      window.open('resume.html', '_blank');
+    }
+
+    function submitQuickApplication() {
+      const confirmCheck = document.getElementById('confirmTermsCheck');
+      if (confirmCheck && !confirmCheck.checked) {
+        showToast('Please confirm terms to submit application', 'warning');
+        return;
+      }
+
+      const currentTitle = document.getElementById('modalJobTitle')?.textContent;
+      if (currentTitle) {
+        sessionStorage.setItem('modalJobTitle', currentTitle);
+        sessionStorage.setItem('selectedCircularTitle', currentTitle);
+        localStorage.setItem('modalJobTitle', currentTitle);
+        localStorage.setItem('selectedCircularTitle', currentTitle);
+      }
+
+      if (currentModalInstance) {
+        currentModalInstance.hide();
+      }
+
+      window.location.href = 'submit.html' + (currentTitle ? '?title=' + encodeURIComponent(currentTitle) : '');
+    }
+
+    // 3. Live Search Engine
+    const searchInput = document.getElementById('dashboardSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const term = this.value.toLowerCase().trim();
+        document.querySelectorAll('.circular-card-item').forEach(card => {
+          const text = card.textContent.toLowerCase();
+          if (text.includes(term)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // 4. Toast Notification Generator
+    function showToast(message, type) {
+      const toast = document.createElement('div');
+      toast.className = `toast-notification-box alert alert-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'dark'} text-white border-0 p-3`;
+      if (type === 'success') toast.style.backgroundColor = '#00b96b';
+      toast.innerHTML = `<div class="d-flex align-items-center gap-2"><i class="bi bi-info-circle-fill"></i><span>${message}</span></div>`;
+
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+  </script>
+</body>
+
+</html>

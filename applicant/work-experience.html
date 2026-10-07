@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ===================================================================
+         DOCUMENT META CONFIGURATION
+         =================================================================== -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Profile | Pubali Bank PLC</title>
+
+    <!-- ===================================================================
+         FAVICON & ICONOGRAPHY ASSETS
+         =================================================================== -->
+    <link rel="icon" type="image/png" href="/assets/images/icon.png" sizes="32x32" />
+
+    <!-- ===================================================================
+         WEB FONTS & EXTERNAL STYLESHEETS
+         =================================================================== -->
+    <!-- Google Fonts Preconnect & Font Ingestion -->
+    <link rel="stylesheet" href="assets/vendor/roboto/roboto.css" />
+
+    <!-- Local Vendor CSS Libraries -->
+    <!-- Bootstrap 5.3.3 Core UI Framework -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons Font Library -->
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" />
+    <!-- Font Awesome Icon Library -->
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/all.min.css" />
+
+    <!-- Application Custom Stylesheet -->
+    <link rel="stylesheet" href="assets/css/applicantdash.css" />
+</head>
+
+<body>
+    <!-- ===================================================================
+         APPLICATION DASHBOARD WRAPPER
+         =================================================================== -->
+    <div class="dash-wrapper">
+
+        <!-- ===============================================================
+             PRIMARY SIDEBAR NAVIGATION (Desktop Viewport)
+             Visible on Large screens (>= 992px); Hidden on smaller viewports.
+             =============================================================== -->
+        <div class="sidebar d-none d-lg-flex flex-column justify-content-between">
+            <div>
+                <!-- Enterprise Brand Logo -->
+                <div class="logo-wrapper">
+                    <img src="assets/images/pbplc.svg" alt="Pubali Logo"
+                        style="max-width: 180px; width: 100%; height: auto" />
+                </div>
+
+                <!-- User Profile Context Card -->
+                <div class="profile-card text-center">
+                    <img src="assets/images/fahim.png" class="rounded-circle profile-img mb-2" alt="User profile" />
+                    <h6 class="fw-bold mb-1" style="color: var(--brand-primary)">Md. Fahim</h6>
+                    <span class="badge bg-white text-success border px-2 py-1"
+                        style="font-size: 0.75rem; font-weight: 600">
+                        ID : 1284647
+                    </span>
+                </div>
+
+                <!-- Main Navigation Links -->
+                <div class="d-flex flex-column">
+                    <a class="nav-link-custom" href="index.html"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+                    <a class="nav-link-custom active" href="documents.html"><i class="bi bi-person-vcard"></i>
+                        Profile</a>
+
+                    <a class="nav-link-custom" href="resume.html"><i class="bi bi-file-earmark-person"></i> View
+                        Resume</a>
+                    <a class="nav-link-custom" href="active-circular.html"><i class="bi bi-briefcase"></i> Active
+                        Circular</a>
+                    <a class="nav-link-custom" href="applied-jobs.html"><i class="bi bi-briefcase"></i> Applied Jobs</a>
+                    <a class="nav-link-custom" href="favourite-jobs.html"><i class="bi bi-bookmark-heart"></i> Favourite
+                        Jobs</a>
+                    <a class="nav-link-custom" href="settings.html"><i class="bi bi-shield-lock"></i> Settings</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer / Session Actions -->
+            <div>
+                <a class="nav-link-custom nav-link-logout" href="#">
+                    <i class="bi bi-box-arrow-left"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- ===============================================================
+             MOBILE NAVIGATION DRAWER (Offcanvas)
+             Toggled via Navbar trigger button on Small to Medium viewports.
+             =============================================================== -->
+        <div class="offcanvas offcanvas-start w-100" id="mobileSidebar" tabindex="-1"
+            style="max-width: var(--sidebar-width);">
+            <div class="d-flex flex-column justify-content-between h-100">
+                <div>
+                    <!-- Mobile Drawer Header with Close Control -->
+                    <div class="offcanvas-header border-bottom">
+                        <img src="assets/images/pbplc.svg" alt="Pubali Logo"
+                            style="max-width: 180px; width: 100%; height: auto" />
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                    </div>
+
+                    <!-- Mobile Drawer Body Content -->
+                    <div class="offcanvas-body p-0">
+                        <!-- User Profile Context Card -->
+                        <div class="profile-card text-center my-3 mx-3">
+                            <img src="assets/images/fahim.png" class="rounded-circle profile-img mb-2"
+                                alt="User profile" />
+                            <h6 class="fw-bold mb-1" style="color: var(--brand-primary)">Md. Fahim</h6>
+                            <span class="badge bg-white text-success border px-2 py-1"
+                                style="font-size: 0.75rem; font-weight: 600">
+                                ID : 1284647
+                            </span>
+                        </div>
+
+                        <!-- Mobile Drawer Navigation Links -->
+                        <div class="d-flex flex-column">
+                            <a class="nav-link-custom" href="index.html"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+                            <a class="nav-link-custom active" href="basicinfo.html"><i class="bi bi-person-vcard"></i>
+                                Profile</a>
+                            <a class="nav-link-custom" href="resume.html"><i class="bi bi-file-earmark-person"></i> View
+                                Resume</a>
+                            <a class="nav-link-custom" href="active-circular.html"><i class="bi bi-briefcase"></i>
+                                Active
+                                Circular</a>
+                            <a class="nav-link-custom" href="applied-jobs.html"><i class="bi bi-briefcase"></i> Applied
+                                Jobs</a>
+                            <a class="nav-link-custom" href="favourite-jobs.html"><i class="bi bi-bookmark-heart"></i>
+                                Favourite Jobs</a>
+                            <a class="nav-link-custom" href="settings.html"><i class="bi bi-shield-lock"></i>
+                                Settings</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Drawer Session Logout -->
+                <div class="px-0">
+                    <a class="nav-link-custom nav-link-logout" href="#">
+                        <i class="bi bi-box-arrow-left"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===============================================================
+             MAIN CONTENT AREA
+             Flex container containing Header Navbar, Form Body, and Footer.
+             =============================================================== -->
+        <div class="main-content d-flex flex-column">
+
+            <!-- -----------------------------------------------------------
+                 TOP APPLICATION NAVBAR
+                 Sticky header featuring search bar and user controls.
+                 ----------------------------------------------------------- -->
+            <nav class="navbar sticky-top bg-white border-bottom px-4 py-2">
+                <div class="d-flex align-items-center w-100 justify-content-between">
+                    <!-- Left Region: Mobile Menu Trigger & Global Search -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-light d-lg-none input-group-text nav-icon-btn" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                            <i class="bi bi-list fs-4"></i>
+                        </button>
+                        <div class="search-container d-none d-sm-block position-relative">
+                            <i
+                                class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                            <input class="form-control search-input ps-5" type="search"
+                                placeholder="Search parameters..." id="dashboardSearch"
+                                style="border-radius: 20px; min-width: 260px" />
+                        </div>
+                    </div>
+
+                    <!-- Right Utilities: Interactive Notifications Dropdown & Profile -->
+                    <div class="d-flex align-items-center gap-3">
+
+                        <!-- Interactive Notification Center -->
+                        <div class="dropdown">
+                            <button class="position-relative nav-icon-btn cursor-pointer" type="button"
+                                id="notificationDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell fs-5"></i>
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
+                                    id="unreadBadgeDot"></span>
+                            </button>
+
+                            <div class="dropdown-menu dropdown-menu-end notification-menu-dropdown p-0 mt-2"
+                                aria-labelledby="notificationDropdownBtn">
+                                <div
+                                    class="p-3 bg-light border-bottom d-flex align-items-center justify-content-between">
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;">
+                                        <i class="bi bi-bell-fill text-success me-1"></i> Notifications
+                                        <span class="badge bg-danger rounded-pill ms-1"
+                                            id="notificationCountBadge">3</span>
+                                    </h6>
+                                    <button
+                                        class="btn btn-link btn-sm text-decoration-none p-0 text-success fw-semibold"
+                                        style="font-size: 0.75rem;" onclick="markAllNotificationsRead()">
+                                        Mark all read
+                                    </button>
+                                </div>
+
+                                <div class="notification-list" style="max-height: 320px; overflow-y: auto;">
+                                    <div class="notification-item unread d-flex align-items-start gap-2"
+                                        onclick="readNotification(this)">
+                                        <div class="bg-success-subtle text-success p-2 rounded-circle flex-shrink-0"
+                                            style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-file-earmark-check"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-semibold mb-0 text-dark" style="font-size: 0.82rem;">Admit
+                                                Card Released</h6>
+                                            <p class="text-muted mb-0 small" style="font-size: 0.75rem;">Senior Officer
+                                                (IT) exam on 15 Aug
+                                                2026. Download now.</p>
+                                            <small class="text-secondary" style="font-size: 0.68rem;">10 mins
+                                                ago</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="notification-item unread d-flex align-items-start gap-2"
+                                        onclick="readNotification(this)">
+                                        <div class="bg-warning-subtle text-warning p-2 rounded-circle flex-shrink-0"
+                                            style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-exclamation-circle"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-semibold mb-0 text-dark" style="font-size: 0.82rem;">Profile
+                                                Update Notice</h6>
+                                            <p class="text-muted mb-0 small" style="font-size: 0.75rem;">Keep your
+                                                profile information and
+                                                documents updated.</p>
+                                            <small class="text-secondary" style="font-size: 0.68rem;">1 day ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-2 text-center bg-light border-top">
+                                    <a href="job-alerts.html"
+                                        class="small text-decoration-none text-muted fw-semibold">View All
+                                        Notifications</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vr my-2 text-secondary opacity-25" style="height: 24px"></div>
+
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2"
+                                data-bs-toggle="dropdown">
+                                <img src="assets/images/fahim.png" class="rounded-circle" width="36" height="36"
+                                    alt="Avatar" />
+                                <span class="d-none d-md-inline fw-semibold text-dark">Md. Fahim</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                <li><a class="dropdown-menu-item dropdown-item" href="basicinfo.html"><i
+                                            class="bi bi-person me-2"></i>
+                                        Edit Profile</a></li>
+                                <li><a class="dropdown-menu-item dropdown-item" href="resume.html"><i
+                                            class="bi bi-file-earmark-person me-2"></i> View Resume</a></li>
+                                <li><a class="dropdown-menu-item dropdown-item" href="settings.html"><i
+                                            class="bi bi-gear me-2"></i>
+                                        Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li><a class="dropdown-menu-item dropdown-item text-danger" href="#"><i
+                                            class="bi bi-box-arrow-left me-2"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- -----------------------------------------------------------
+                 FORM CANVAS & CONTAINER
+                 Scrollable content wrapper housing the wizard stepper & form.
+                 ----------------------------------------------------------- -->
+            <div class="overflow-hidden pt-3">
+                <div class="container form-container">
+                    <div class="form-card">
+
+                        <!-- ===============================================
+                             STEPPER NAVIGATION WIZARD
+                             Indicates progress through application profile creation.
+                             =============================================== -->
+                        <div class="step-tabs-container">
+                            <ul class="step-tabs">
+                                <li>
+                                    <a href="documents.html" class="step-item completed">
+                                        <span class="step-content"><i class="fa-solid fa-file-lines"></i> Objective &
+                                            Documents</span>
+                                        <i class="fa-solid fa-circle-check text-success tick-icon"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="basicinfo.html" class="step-item completed">
+                                        <span class="step-content"><i class="fa-solid fa-circle-user"></i> Basic
+                                            Information</span>
+                                        <i class="fa-solid fa-circle-check text-success tick-icon"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="education.html" class="step-item completed">
+                                        <span class="step-content"><i class="fa-solid fa-graduation-cap"></i>
+                                            Education</span>
+                                        <i class="fa-solid fa-circle-check text-success tick-icon"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="work-experience.html" class="step-item active">
+                                        <span class="step-content"><i class="fa-solid fa-briefcase"></i> Work
+                                            Experience</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="certification.html" class="step-item">
+                                        <span class="step-content"><i class="fa-solid fa-certificate"></i>
+                                            Certification</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="skills.html" class="step-item">
+                                        <span class="step-content"><i class="fa-solid fa-gears"></i>
+                                            Skills</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="references.html" class="step-item">
+                                        <span class="step-content"><i class="fa-solid fa-users"></i> References</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- ===============================================
+                             DYNAMIC FORM SCROLLABLE BODY
+                             Main application form structure for data collection.
+                             =============================================== -->
+                        <div class="form-scroll">
+                            <form id="profileForm" novalidate>
+                                <div class="form-step-content active-step" id="step-basic">
+                                    <div class="section-card mb-4">
+
+                                        <!-- Section Header featuring Experience Status Radio Controls -->
+                                        <div
+                                            class="section-title fw-bold border-bottom pb-2 d-flex align-items-center justify-content-between gap-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fa-solid fa-briefcase" aria-hidden="true"></i> Work Experience
+                                            </div>
+                                            <!-- Toggle: Toggles visibility or requirements for experience grid -->
+                                            <div class="d-flex align-items-center gap-5"
+                                                style="font-size: 0.875rem; font-weight: normal;">
+                                                <span class="text-secondary d-none d-sm-inline">Any work
+                                                    experience?</span>
+                                                <div class="form-check form-check-inline m-0 gap-2">
+                                                    <input class="form-check-input cursor-pointer" type="radio"
+                                                        name="hasExperience" id="expYes" value="yes" checked>
+                                                    <label class="form-check-label cursor-pointer"
+                                                        for="expYes">Yes</label>
+                                                </div>
+                                                <div class="form-check form-check-inline m-0 gap-2">
+                                                    <input class="form-check-input cursor-pointer" type="radio"
+                                                        name="hasExperience" id="expNo" value="no">
+                                                    <label class="form-check-label cursor-pointer"
+                                                        for="expNo">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Work Experience Grid Component -->
+                                        <div class="table-card-pad" id="workExperienceWrapper">
+                                            <div class="education-wrapper">
+                                                <div class="table-responsive">
+                                                    <table class="education-table align-middle" id="educationTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 15%;">Designation</th>
+                                                                <th style="width: 25%;">Name of Organization</th>
+                                                                <th style="width: 12%;">Job Type</th>
+                                                                <th style="width: 28%;">Responsibilities</th>
+                                                                <th style="width: 9%;">Joining Date</th>
+                                                                <th style="width: 11%;">End Date</th>
+                                                                <th style="width: 2%;"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tableBody">
+                                                            <!-- Entry Row #1 (Default Initial State) -->
+                                                            <tr data-level="work1" class="first-row">
+                                                                <!-- Designation Field -->
+                                                                <td><input type="text"
+                                                                        class="form-control field-designation"
+                                                                        placeholder="Designation" name="designation">
+                                                                </td>
+                                                                <!-- Organization Field -->
+                                                                <td><input type="text"
+                                                                        class="form-control field-organization"
+                                                                        placeholder="Organization Name"
+                                                                        name="organization"></td>
+                                                                <!-- Employment Type Selection -->
+                                                                <td>
+                                                                    <select class="form-select field-jobtype"
+                                                                        name="jobtype">
+                                                                        <option value="" selected disabled>-- Select --
+                                                                        </option>
+                                                                        <option value="FullTime">Full Time</option>
+                                                                        <option value="PartTime">Part Time</option>
+                                                                    </select>
+                                                                </td>
+                                                                <!-- Key Responsibilities Field -->
+                                                                <td><input type="text"
+                                                                        class="form-control field-responsibilities"
+                                                                        placeholder="Key Responsibilities"
+                                                                        name="responsibilities"></td>
+                                                                <!-- Joining Date Picker -->
+                                                                <td><input type="date"
+                                                                        class="form-control field-joining-date"
+                                                                        name="joiningDate"></td>
+                                                                <!-- End Date Picker & Ongoing Employment Checkbox -->
+                                                                <td>
+                                                                    <div class="d-flex flex-column align-items-start">
+                                                                        <input type="date"
+                                                                            class="form-control field-end-date"
+                                                                            name="endDate">
+                                                                        <div
+                                                                            class="form-check mt-1 d-flex justify-content-start align-items-center gap-1 w-100">
+                                                                            <input
+                                                                                class="form-check-input chk-continue ms-0"
+                                                                                type="checkbox" id="toContinue_1">
+                                                                            <label
+                                                                                class="form-check-label form-check-label-sm"
+                                                                                for="toContinue_1">To continue</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <!-- Action Cell (For dynamically appended delete controls) -->
+                                                                <td class="text-center"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dynamic Row Append Trigger Button -->
+                                        <div class="table-button d-flex justify-content-end align-items-center">
+                                            <button type="button" class="btn btn-outline-success rounded-pill px-4 py-2"
+                                                id="addEducationBtn">
+                                                <i class="fa-solid fa-plus me-2"></i>Add New Work
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Footer Controls: Back and Submit/Next Actions -->
+                                <div class="form-footer d-flex justify-content-between align-items-center mt-4">
+                                    <button type="button" class="btn btn-cancel" id="prevBtn" disabled>Back</button>
+                                    <button type="submit" class="btn btn-save-next" id="nextBtn">
+                                        Save & Next <i class="fa-solid fa-arrow-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- -----------------------------------------------------------
+                 GLOBAL APPLICATION FOOTER
+                 ----------------------------------------------------------- -->
+            <footer class="dash-footer bg-white border-top mt-auto">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                    <div>
+                        <span class="small text-secondary">© 2026 <strong>Pubali Bank PLC.</strong> All rights
+                            reserved.</span>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-decoration-none text-secondary small">Privacy Policy</a>
+                        <a href="#" class="text-decoration-none text-secondary small">Terms of Service</a>
+                        <a href="#" class="text-decoration-none text-secondary small">Support</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ===================================================================
+         VENDOR JAVASCRIPT LIBRARIES
+         =================================================================== -->
+    <!-- Bootstrap 5.3.3 JS Bundle (includes Popper.js for positioning) -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/notifications.js"></script>
+    <script src="assets/js/profile-data.js"></script>
+
+    <!-- DYNAMIC ROW CREATION & VALIDATION ENGINE -->
+    <script>
+        /**
+         * @fileoverview Work Experience Dynamic Form & Grid Handler
+         * @description Controls dynamic row creation, deletion, conditionally-disabled sections,
+         * date-range comparisons, local storage persistence, visible error alert banner, and realtime field validation.
+         */
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("profileForm");
+            const prevBtn = document.getElementById("prevBtn");
+            const tableBody = document.getElementById("tableBody");
+            const addBtn = document.getElementById("addEducationBtn");
+            const workWrapper = document.getElementById("workExperienceWrapper");
+            const expRadios = document.querySelectorAll('input[name="hasExperience"]');
+
+            const STORAGE_KEY = 'pubali_profile_data';
+            function getProfileData() {
+                try {
+                    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+                } catch (err) {
+                    return {};
+                }
+            }
+            function saveProfileData(data) {
+                try {
+                    const current = getProfileData();
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, ...data }));
+                } catch (err) {
+                    console.warn('Storage quota exceeded or unavailable', err);
+                }
+            }
+
+            // Ensure dynamic error alert container exists above work experience table
+            function getOrCreateWorkErrorAlert() {
+                let alertEl = document.getElementById("workErrorAlert");
+                if (!alertEl && workWrapper) {
+                    alertEl = document.createElement("div");
+                    alertEl.id = "workErrorAlert";
+                    alertEl.className = "alert alert-danger py-2 px-3 small d-flex align-items-center gap-2 mb-3";
+                    alertEl.style.display = "none";
+                    alertEl.innerHTML = '<i class="fa-solid fa-circle-exclamation fs-5 flex-shrink-0"></i><span id="workErrorAlertText"></span>';
+                    workWrapper.insertBefore(alertEl, workWrapper.firstChild);
+                }
+                return alertEl;
+            }
+
+            function showWorkError(message) {
+                const alertEl = getOrCreateWorkErrorAlert();
+                const textSpan = alertEl ? alertEl.querySelector("#workErrorAlertText") : null;
+                if (textSpan) textSpan.textContent = message;
+                if (alertEl) alertEl.style.display = "flex";
+            }
+
+            function hideWorkError() {
+                const alertEl = document.getElementById("workErrorAlert");
+                if (alertEl) alertEl.style.display = "none";
+            }
+
+            // 1. Back button activation -> Navigates to Step 3: education.html
+            if (prevBtn) {
+                prevBtn.disabled = false;
+                prevBtn.addEventListener("click", function () {
+                    window.location.href = "education.html";
+                });
+            }
+
+            // 2. Toggle work experience based on Yes / No radio
+            function toggleWorkExperience(hasExperience) {
+                const inputs = workWrapper.querySelectorAll("input, select, button");
+                if (hasExperience) {
+                    workWrapper.classList.remove("disabled-section");
+                    if (addBtn) addBtn.disabled = false;
+
+                    inputs.forEach(input => {
+                        if (input.classList.contains("field-end-date")) {
+                            const row = input.closest("tr");
+                            const chk = row ? row.querySelector(".chk-continue") : null;
+                            if (chk && chk.checked) {
+                                input.disabled = true;
+                                return;
+                            }
+                        }
+                        input.disabled = false;
+                    });
+                } else {
+                    workWrapper.classList.add("disabled-section");
+                    if (addBtn) addBtn.disabled = true;
+                    hideWorkError();
+
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        input.classList.remove("is-valid", "is-invalid");
+                        input.removeAttribute("title");
+                    });
+                }
+            }
+
+            expRadios.forEach(radio => {
+                radio.addEventListener("change", function () {
+                    toggleWorkExperience(this.value === "yes");
+                });
+            });
+
+            // 3. Field Level Validation
+            function validateField(field) {
+                const expNoRadio = document.getElementById("expNo");
+                if (expNoRadio && expNoRadio.checked) {
+                    field.classList.remove("is-invalid", "is-valid");
+                    field.removeAttribute("title");
+                    return { valid: true, error: null };
+                }
+
+                const value = field.value.trim();
+                let isValid = true;
+                let errorMsg = null;
+                const row = field.closest("tr");
+
+                if (value === "" || value === null) {
+                    isValid = false;
+                    if (field.classList.contains("field-designation")) errorMsg = "Designation is required.";
+                    else if (field.classList.contains("field-organization")) errorMsg = "Organization name is required.";
+                    else if (field.classList.contains("field-jobtype")) errorMsg = "Job type is required.";
+                    else if (field.classList.contains("field-responsibilities")) errorMsg = "Key responsibilities are required.";
+                    else if (field.classList.contains("field-joining-date")) errorMsg = "Joining date is required.";
+                    else if (field.classList.contains("field-end-date")) errorMsg = "End date is required.";
+                    else errorMsg = "This field is required.";
+                }
+
+                // End Date specific checks
+                if (field.classList.contains("field-end-date")) {
+                    const continueChk = row ? row.querySelector(".chk-continue") : null;
+                    if (continueChk && continueChk.checked) {
+                        field.classList.remove("is-invalid");
+                        field.classList.add("is-valid");
+                        field.removeAttribute("title");
+                        return { valid: true, error: null };
+                    }
+
+                    if (value !== "" && row) {
+                        const joiningField = row.querySelector(".field-joining-date");
+                        const joiningDateValue = joiningField ? joiningField.value : "";
+                        if (joiningDateValue !== "") {
+                            const joiningDate = new Date(joiningDateValue);
+                            const endDate = new Date(value);
+                            if (endDate < joiningDate) {
+                                isValid = false;
+                                errorMsg = "End Date cannot be earlier than Joining Date.";
+                            }
+                        }
+                    }
+                }
+
+                if (isValid) {
+                    field.classList.remove("is-invalid");
+                    field.classList.add("is-valid");
+                    field.removeAttribute("title");
+                } else {
+                    field.classList.remove("is-valid");
+                    field.classList.add("is-invalid");
+                    if (errorMsg) field.setAttribute("title", errorMsg);
+                }
+
+                return { valid: isValid, error: errorMsg };
+            }
+
+            // 4. Dynamic Row Creation
+            if (addBtn) {
+                addBtn.addEventListener("click", function () {
+                    const rowCount = tableBody.querySelectorAll("tr").length + 1;
+                    const newRow = document.createElement("tr");
+                    newRow.setAttribute("data-level", "work" + rowCount);
+
+                    newRow.innerHTML = `
+                        <td>
+                            <input type="text" class="form-control field-designation" placeholder="Designation" name="designation">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control field-organization" placeholder="Organization Name" name="organization">
+                        </td>
+                        <td>
+                            <select class="form-select field-jobtype" name="jobtype">
+                                <option value="" selected disabled>-- Select --</option>
+                                <option value="FullTime">Full Time</option>
+                                <option value="PartTime">Part Time</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control field-responsibilities" placeholder="Key Responsibilities" name="responsibilities">
+                        </td>
+                        <td>
+                            <input type="date" class="form-control field-joining-date" name="joiningDate">
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column align-items-start">
+                                <input type="date" class="form-control field-end-date" name="endDate">
+                                <div class="form-check mt-1 d-flex justify-content-start align-items-center gap-1 w-100">
+                                    <input class="form-check-input chk-continue ms-0" type="checkbox" id="toContinue_${rowCount}">
+                                    <label class="form-check-label form-check-label-sm" for="toContinue_${rowCount}">To continue</label>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-outline-danger btn-sm border-0 remove-row-btn btn-delete-row">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    `;
+
+                    tableBody.appendChild(newRow);
+                });
+            }
+
+            // 5. Delegated Events (Deletion, Checkbox, Live Validation)
+            form.addEventListener("click", function (e) {
+                const deleteBtn = e.target.closest(".btn-delete-row");
+                if (deleteBtn) {
+                    const row = deleteBtn.closest("tr");
+                    if (row && !row.classList.contains("first-row")) {
+                        row.remove();
+                        if (!workWrapper.querySelector(".is-invalid")) {
+                            hideWorkError();
+                        }
+                    }
+                }
+            });
+
+            form.addEventListener("change", function (event) {
+                if (event.target.classList.contains("chk-continue")) {
+                    const row = event.target.closest("tr");
+                    const endDateInput = row.querySelector(".field-end-date");
+                    if (event.target.checked) {
+                        endDateInput.value = "";
+                        endDateInput.disabled = true;
+                        endDateInput.classList.remove("is-invalid");
+                        endDateInput.classList.add("is-valid");
+                        endDateInput.removeAttribute("title");
+                    } else {
+                        endDateInput.disabled = false;
+                        validateField(endDateInput);
+                    }
+                }
+
+                if (event.target.classList.contains("form-control") || event.target.classList.contains("form-select")) {
+                    validateField(event.target);
+
+                    if (event.target.classList.contains("field-joining-date")) {
+                        const row = event.target.closest("tr");
+                        const endDateField = row.querySelector(".field-end-date");
+                        if (endDateField && endDateField.value !== "") {
+                            validateField(endDateField);
+                        }
+                    }
+
+                    if (!workWrapper.querySelector(".is-invalid")) {
+                        hideWorkError();
+                    }
+                }
+            });
+
+            form.addEventListener("input", function (event) {
+                if (event.target.classList.contains("form-control")) {
+                    if (form.classList.contains("was-validated") || event.target.classList.contains("is-invalid") || event.target.classList.contains("is-valid")) {
+                        validateField(event.target);
+                    }
+                    if (!workWrapper.querySelector(".is-invalid")) {
+                        hideWorkError();
+                    }
+                }
+            });
+
+            // 6. Restore Saved Work Experience from LocalStorage or Resume Defaults
+            const initialProfile = window.PubaliProfile ? window.PubaliProfile.getProfileData() : getProfileData();
+            if (initialProfile.workExperience) {
+                const we = initialProfile.workExperience;
+                const hasExp = we.hasExperience !== 'no';
+
+                const yesRadio = document.getElementById("expYes");
+                const noRadio = document.getElementById("expNo");
+                if (hasExp && yesRadio) {
+                    yesRadio.checked = true;
+                    toggleWorkExperience(true);
+                } else if (!hasExp && noRadio) {
+                    noRadio.checked = true;
+                    toggleWorkExperience(false);
+                }
+
+                if (hasExp && Array.isArray(we.records) && we.records.length > 0) {
+                    we.records.forEach((rec, idx) => {
+                        let row = tableBody.querySelectorAll("tr")[idx];
+                        if (!row && addBtn) {
+                            addBtn.click();
+                            row = tableBody.querySelectorAll("tr")[idx];
+                        }
+                        if (row) {
+                            const desig = row.querySelector(".field-designation");
+                            const org = row.querySelector(".field-organization");
+                            const jtype = row.querySelector(".field-jobtype");
+                            const resp = row.querySelector(".field-responsibilities");
+                            const jdate = row.querySelector(".field-joining-date");
+                            const edate = row.querySelector(".field-end-date");
+                            const toCont = row.querySelector(".chk-continue");
+
+                            if (desig && rec.designation) desig.value = rec.designation;
+                            if (org && rec.organization) org.value = rec.organization;
+                            if (jtype && rec.jobtype) jtype.value = rec.jobtype;
+                            if (resp && rec.responsibilities) resp.value = rec.responsibilities;
+                            if (jdate && rec.joiningDate) jdate.value = rec.joiningDate;
+                            if (toCont) {
+                                toCont.checked = Boolean(rec.toContinue);
+                                if (toCont.checked && edate) {
+                                    edate.disabled = true;
+                                    edate.value = "";
+                                } else if (edate && rec.endDate) {
+                                    edate.value = rec.endDate;
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // 7. Form Submission Pipeline
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                form.classList.add("was-validated");
+                let isFormValid = true;
+                let primaryError = null;
+
+                const expYes = document.getElementById("expYes") ? document.getElementById("expYes").checked : true;
+
+                if (expYes) {
+                    const rows = tableBody ? tableBody.querySelectorAll("tr") : [];
+                    rows.forEach(function (row) {
+                        const fields = row.querySelectorAll(".form-control, .form-select");
+                        fields.forEach(function (field) {
+                            const res = validateField(field);
+                            if (!res.valid) {
+                                isFormValid = false;
+                                if (!primaryError) primaryError = res.error;
+                            }
+                        });
+                    });
+                }
+
+                if (!isFormValid) {
+                    showWorkError(primaryError || "Please complete all required fields for active work experience entries.");
+                    const firstInvalid = form.querySelector(".is-invalid");
+                    if (firstInvalid) {
+                        firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+                        setTimeout(() => {
+                            if (typeof firstInvalid.focus === "function") firstInvalid.focus();
+                        }, 250);
+                    }
+                    return;
+                }
+
+                hideWorkError();
+
+                // Serialize records
+                const records = [];
+                if (expYes && tableBody) {
+                    tableBody.querySelectorAll("tr").forEach(row => {
+                        const desig = row.querySelector(".field-designation")?.value || "";
+                        if (desig) {
+                            records.push({
+                                designation: desig,
+                                organization: row.querySelector(".field-organization")?.value || "",
+                                jobtype: row.querySelector(".field-jobtype")?.value || "",
+                                responsibilities: row.querySelector(".field-responsibilities")?.value || "",
+                                joiningDate: row.querySelector(".field-joining-date")?.value || "",
+                                endDate: row.querySelector(".field-end-date")?.value || "",
+                                toContinue: Boolean(row.querySelector(".chk-continue")?.checked)
+                            });
+                        }
+                    });
+                }
+
+                saveProfileData({
+                    workExperience: {
+                        hasExperience: expYes ? "yes" : "no",
+                        records: records
+                    }
+                });
+
+                // Navigate seamlessly to Step 5: Certification
+                window.location.href = "certification.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

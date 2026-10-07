@@ -1,0 +1,192 @@
+/* ==========================================================================
+   Printable documents - admit card, profile, attendance / result sheet, offer
+   Screen styles preview the sheet; @media print strips the app chrome.
+   ========================================================================== */
+
+*, body, .doc-page, table, th, td, div, p, span, h1, h2, h3, h4, h5, h6, dt, dd, input, button {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.print-toolbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.print-toolbar .spacer { flex: 1 1 auto; }
+
+.doc-stack { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+
+.doc-page {
+  background: #fff;
+  width: 210mm;
+  max-width: 100%;
+  min-height: 148mm;
+  padding: 16mm 15mm;
+  border: 1px solid var(--er-line, #e2e8f0);
+  border-radius: 4px;
+  box-shadow: 0 2px 14px rgba(15, 23, 42, .07);
+  color: #111827;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.doc-page.landscape { width: 297mm; }
+
+.doc-head {
+  text-align: center;
+  border-bottom: 2px solid #111827;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.doc-head .org { font-size: 19px; font-weight: 700; letter-spacing: .02em; }
+.doc-head .addr { font-size: 11px; color: #4b5563; }
+.doc-head .doc-title {
+  margin-top: 9px; font-size: 13.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; display: inline-block;
+  border: 1.5px solid #111827; padding: 3px 16px; border-radius: 3px;
+}
+
+.doc-meta { display: flex; justify-content: space-between; gap: 16px; font-size: 11.5px; margin-bottom: 12px; }
+
+.doc-grid { display: grid; grid-template-columns: 150px 1fr; gap: 4px 10px; font-size: 12px; }
+.doc-grid dt { color: #4b5563; }
+.doc-grid dd { margin: 0; font-weight: 600; }
+
+.doc-photo {
+  width: 32mm; height: 40mm; border: 1px solid #111827;
+  display: grid; place-items: center; text-align: center;
+  font-size: 10px; color: #6b7280; float: right; margin: 0 0 8px 12px;
+}
+.doc-photo .initials { font-size: 22px; font-weight: 700; color: #111827; }
+
+.doc-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 8px; }
+.doc-table th, .doc-table td { border: 1px solid #9ca3af; padding: 5px 7px; }
+.doc-table th { background: #f3f4f6; text-align: left; font-weight: 700; }
+.doc-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.doc-table td.ctr, .doc-table th.ctr { text-align: center; }
+
+.doc-section-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  border-bottom: 1px solid #9ca3af; padding-bottom: 3px; margin: 14px 0 7px;
+}
+
+.doc-instructions { font-size: 11px; }
+.doc-instructions ol { margin: 0; padding-left: 18px; }
+.doc-instructions li { margin-bottom: 3px; }
+
+.doc-body p { margin: 0 0 9px; }
+
+.doc-signs { display: flex; justify-content: space-between; margin-top: 34px; font-size: 11.5px; }
+.doc-sign { text-align: center; min-width: 150px; }
+.doc-sign .line { border-top: 1px solid #111827; padding-top: 4px; margin-top: 34px; }
+
+.doc-foot { margin-top: 16px; border-top: 1px dashed #9ca3af; padding-top: 6px; font-size: 10px; color: #6b7280; }
+
+.doc-cut { border-top: 2px dashed #9ca3af; margin: 14px 0 10px; }
+
+@media print {
+  @page { size: A4; margin: 10mm; }
+
+  body { background: #fff !important; }
+  .sidebar, .topbar, .sidebar-backdrop,
+  .print-toolbar, .toast-container, #modal-host, #drawer-host,
+  .action-bar, .stage-head { display: none !important; }
+  .main-wrap { margin-left: 0 !important; }
+  .view { padding: 0 !important; }
+  .doc-stack { gap: 0; display: block; }
+  .doc-page {
+    width: auto; min-height: 0; border: 0; border-radius: 0;
+    box-shadow: none; padding: 0 0 6mm;
+    page-break-after: always;
+  }
+  .doc-page:last-child { page-break-after: auto; }
+  .doc-page.landscape { width: auto; }
+  .doc-table { page-break-inside: auto; }
+  .doc-table tr { page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  .pbl-admit-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    page-break-after: always;
+  }
+  .pbl-admit-card:last-child {
+    page-break-after: auto;
+  }
+}
+
+/* ==========================================================================
+   Pubali Bank Official Admit Card Styles (Matching PBL_Admitcard.pdf)
+   ========================================================================== */
+.pbl-admit-card,
+.pbl-admit-card * {
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+  box-sizing: border-box;
+}
+
+.pbl-admit-card {
+  position: relative;
+  background: #ffffff;
+  color: #000000;
+  width: 210mm;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 30px 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+  line-height: 1.35;
+  overflow: hidden;
+}
+
+.pbl-admit-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  height: 320px;
+  opacity: 0.045;
+  pointer-events: none;
+  background-image: url('../images/pbl_admit_logo.jpg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.pbl-admit-val-box {
+  display: inline-block;
+  border: 1.5px solid #000000;
+  min-width: 120px;
+  height: 25px;
+  line-height: 22px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 13.5px;
+  padding: 0 10px;
+  background: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.pbl-admit-photo-box {
+  width: 96px;
+  height: 116px;
+  border: 1px solid #000000;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.pbl-admit-photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+

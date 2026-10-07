@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Pubali Bank PLC.</title> <!-- Standard PNG Icon -->
+    <link rel="icon" type="image/png" href="/assets/images/icon.png" sizes="32x32">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs-container">
+        <div class="bg-left"></div>
+        <div class="bg-right"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="card auth-card">
+
+            <div class="auth-header">
+                <div class="brand-logo-fallback">
+                    <img src="assets/images/pbllogo.svg" alt="Pubali Logo" width="40" height="40"
+                        onerror="this.style.display='none'">
+                </div>
+                <div class="header-title-area">
+                    <div class="title-bangla">
+                        <img src="assets/images/pbllogotext.svg" alt="Pubali Bank" width="170" height="40"
+                            onerror="this.style.display='none'">
+                    </div>
+                </div>
+                <div class="system-tag">E-recruitment System</div>
+            </div>
+
+            <div class="auth-body">
+                <h2 id="formTitle">Create account.</h2>
+                <div class="account-switch-text" id="formSubtitle">
+                    Have an account? <a href="index.html">Log in</a>
+                </div>
+
+                <form id="authFlowForm" autocomplete="on" novalidate>
+                    <!-- Step 1: Mobile Field -->
+                    <div class="mb-2">
+                        <label for="phoneNumberField" class="form-label">Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text phone-prefix">
+                                <img src="https://flagcdn.com/w40/bd.png" alt="Bangladesh" class="me-2">
+                                +880
+                            </span>
+                            <input type="tel" class="form-control phone-input-field" id="phoneNumberField"
+                                placeholder="1XXXXXXXXX" maxlength="10" required>
+                            <div class="invalid-feedback">Please enter a valid Bangladeshi mobile number.</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Dynamic OTP Entry (Hidden Initially) -->
+                    <div id="otpWrapper" class="transition-block">
+                        <label for="otpField" class="form-label">Enter 6-Digit OTP</label>
+                        <input type="text" class="form-control text-center otp-input-field" id="otpField"
+                            placeholder="******" maxlength="6" inputmode="numeric">
+                        <div class="invalid-feedback">Please enter a valid 6-digit verification code.</div>
+                        <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+                            <small class="text-muted" id="timerContainer">Resend code in <span
+                                    id="countdown">60</span>s</small>
+                            <button type="button" id="resendBtn"
+                                class="btn btn-link btn-sm p-0 d-none text-decoration-none fw-semibold"
+                                style="color: var(--brand-teal)">Resend OTP</button>
+                            <button type="button" id="changeNumBtn"
+                                class="btn btn-link btn-change btn-sm p-0 text-decoration-none small">Change
+                                Number</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-signin" id="submitBtn" disabled>
+                        <span>Send OTP</span> <i class="fa-solid fa-arrow-right-long ms-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div>&copy; 2026 Pubali HR Management System. All rights reserved.</div>
+            <div>Last updated: June 15, 2026 &nbsp; &nbsp; | &nbsp; &nbsp; System Version: v1.0.0</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("authFlowForm");
+            const phoneField = document.getElementById("phoneNumberField");
+            const otpWrapper = document.getElementById("otpWrapper");
+            const otpField = document.getElementById("otpField");
+            const submitBtn = document.getElementById("submitBtn");
+            const changeNumBtn = document.getElementById("changeNumBtn");
+            const resendBtn = document.getElementById("resendBtn");
+            const countdownEl = document.getElementById("countdown");
+            const timerContainer = document.getElementById("timerContainer");
+            const formTitle = document.getElementById("formTitle");
+            const formSubtitle = document.getElementById("formSubtitle");
+
+            const bdRegex = /^1[3-9]\d{8}$/;
+            let currentStep = "PHONE"; // 'PHONE' or 'OTP'
+            let timerInterval = null;
+
+            // Multi-functional Unified Toggle Button State Helper
+            function updateButtonState(isEnabled, text, showIcon = true) {
+                submitBtn.disabled = !isEnabled;
+                submitBtn.classList.toggle("active", isEnabled);
+                submitBtn.innerHTML = `${text} ${showIcon ? '<i class="fa-solid fa-arrow-right-long ms-1"></i>' : ''}`;
+            }
+
+            // Input sanitizer & dynamic validator 
+            function handlePhoneInput() {
+                phoneField.value = phoneField.value.replace(/\D/g, "").substring(0, 10);
+                const isValid = bdRegex.test(phoneField.value);
+
+                phoneField.classList.toggle("is-valid", isValid);
+                phoneField.classList.toggle("is-invalid", !isValid && phoneField.value.length === 10);
+
+                if (currentStep === "PHONE") {
+                    updateButtonState(isValid, "Send OTP");
+                }
+            }
+
+            function handleOtpInput() {
+                otpField.value = otpField.value.replace(/\D/g, "").substring(0, 6);
+                const isValid = otpField.value.length === 6;
+
+                otpField.classList.toggle("is-valid", isValid);
+                if (otpField.value.length > 0 && !isValid) {
+                    otpField.classList.remove("is-invalid"); // Clean invalid state while typing
+                }
+
+                if (currentStep === "OTP") {
+                    updateButtonState(isValid, "Verify & Proceed", false);
+                }
+            }
+
+            // Clean, high-performance countdown Timer
+            function startTimer() {
+                clearInterval(timerInterval);
+                let duration = 60;
+                countdownEl.textContent = duration;
+                timerContainer.classList.remove("d-none");
+                resendBtn.classList.add("d-none");
+
+                timerInterval = setInterval(() => {
+                    duration--;
+                    countdownEl.textContent = duration;
+                    if (duration <= 0) {
+                        clearInterval(timerInterval);
+                        timerContainer.classList.add("d-none");
+                        resendBtn.classList.remove("d-none");
+                    }
+                }, 1000);
+            }
+
+            // Clean UI Step transformations switching profiles
+            function changeStepToOtp() {
+                currentStep = "OTP";
+                phoneField.disabled = true;
+                formTitle.textContent = "Verify Mobile.";
+                formSubtitle.innerHTML = `Enter the 6-digit verification code sent to <strong>+880 ${phoneField.value}</strong><br><small class="text-success fw-semibold">(Demo OTP: Any 6 digits e.g., 123456)</small>`;
+
+                otpWrapper.classList.add("show");
+                otpField.required = true;
+                otpField.focus();
+
+                updateButtonState(false, "Verify & Proceed", false);
+                startTimer();
+            }
+
+            function resetToPhoneStep() {
+                currentStep = "PHONE";
+                clearInterval(timerInterval);
+
+                phoneField.disabled = false;
+                phoneField.focus();
+                formTitle.textContent = "Create account.";
+                formSubtitle.innerHTML = 'Have an account? <a href="index.html">Log in</a>';
+
+                otpWrapper.classList.remove("show");
+                otpField.required = false;
+                otpField.value = "";
+                otpField.classList.remove("is-valid", "is-invalid");
+
+                handlePhoneInput();
+            }
+
+            // Context-Aware form pipeline workflow processing
+            function processFormSubmission(e) {
+                e.preventDefault();
+
+                if (currentStep === "PHONE") {
+                    if (!bdRegex.test(phoneField.value)) {
+                        phoneField.classList.add("is-invalid");
+                        return;
+                    }
+
+                    updateButtonState(false, '<span class="spinner-border spinner-border-sm me-2"></span>Sending OTP...', false);
+                    setTimeout(changeStepToOtp, 800);
+
+                } else if (currentStep === "OTP") {
+                    if (otpField.value.length !== 6) {
+                        otpField.classList.add("is-invalid");
+                        return;
+                    }
+
+                    updateButtonState(false, '<span class="spinner-border spinner-border-sm me-2"></span>Verifying & Redirecting...', false);
+
+                    setTimeout(() => {
+                        const rawPhone = phoneField.value.trim();
+                        const fullPhone = rawPhone.startsWith('0') ? rawPhone : ('0' + rawPhone);
+                        sessionStorage.setItem('verifiedMobile', fullPhone);
+                        localStorage.setItem('verifiedMobile', fullPhone);
+                        window.location.href = 'registrationbg.html';
+                    }, 800);
+                }
+            }
+
+            // Event bindings
+            phoneField.addEventListener("input", handlePhoneInput);
+            otpField.addEventListener("input", handleOtpInput);
+            changeNumBtn.addEventListener("click", resetToPhoneStep);
+            form.addEventListener("submit", processFormSubmission);
+
+            resendBtn.addEventListener("click", () => {
+                resendBtn.classList.add("d-none");
+                startTimer();
+                console.log(`OTP Resent successfully to +880${phoneField.value}`);
+            });
+        });
+    </script>
+</body>
+
+</html>

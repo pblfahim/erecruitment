@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Pubali Bank PLC.</title> <!-- Standard PNG Icon -->
+    <link rel="icon" type="image/png" href="/assets/images/icon.png" sizes="32x32">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="bg-blobs-container">
+        <div class="bg-left"></div>
+        <div class="bg-right"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="card auth-card">
+
+            <div class="auth-header">
+                <div class="brand-logo-fallback">
+                    <img src="assets/images/pbllogo.svg" alt="Pubali Logo" width="40" height="40">
+                </div>
+                <div class="header-title-area">
+                    <div class="title-bangla">
+                        <img src="assets/images/pbllogotext.svg" alt="Pubali Bank" width="170" height="40">
+                    </div>
+                </div>
+                <div class="system-tag">
+                    E-recruitment System
+                </div>
+            </div>
+
+            <div class="auth-body">
+                <h2>Sign in</h2>
+                <div class="account-switch-text">
+                    Don’t have account <a href="OTP.html">Create Account</a>
+                </div>
+
+                <form id="signInForm" autocomplete="on" novalidate>
+                    <!-- Login Alert Feedback -->
+                    <div id="loginAlert" class="alert alert-danger d-none py-2 px-3 small mb-3" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label for="identityField" class="form-label">Mobile Number / Email Address / Profile ID</label>
+                        <input type="text" class="form-control" id="identityField" name="username"
+                            placeholder="e.g., 017XXXXXXXX, name@email.com, or Profile ID" required autocomplete="username">
+                        <div class="validation-feedback" id="identityFeedback">Please enter a valid email address,
+                            mobile number, or Profile ID.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="passwordField" class="form-label">Password</label>
+                        <div class="password-container">
+                            <input type="password" class="form-control" id="passwordField" name="password"
+                                placeholder="Enter Password" required autocomplete="current-password">
+                            <span class="password-toggle-icon" id="passwordToggle" onclick="handlePasswordToggle()">
+                                <i class="fa-regular fa-eye" id="toggleIcon"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Added 'disabled' attribute to match initialization state -->
+                    <button type="submit" id="submitBtn" class="btn btn-signin" disabled>
+                        <span>Sign In</span> <i class="fa-solid fa-arrow-right-long ms-1"></i>
+                    </button>
+
+                    <div class="mt-3 pt-3 text-center border-top small" style="font-size: 0.82rem;">
+                        <span class="text-muted">HR Staff / Management Access:</span>
+                        <a href="../../index.html" class="fw-semibold text-success text-decoration-none ms-1">
+                            Go to HRD Portal <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size: 0.72rem;"></i>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div>
+                © 2026 Pubali HR Management System. All rights reserved.
+            </div>
+            <div>
+                Last updated: June 15, 2026 &nbsp; &nbsp; | &nbsp; &nbsp; System Version: v1.0.0
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth password look-ahead toggle handler
+        function handlePasswordToggle() {
+            const passwordField = document.getElementById('passwordField');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // --- Core Validation Flow Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const identityField = document.getElementById('identityField');
+            const passwordField = document.getElementById('passwordField');
+            const submitBtn = document.getElementById('submitBtn');
+            const identityFeedback = document.getElementById('identityFeedback');
+            const signInForm = document.getElementById('signInForm');
+            const loginAlert = document.getElementById('loginAlert');
+
+            // Prefill with newly registered user mobile or ID if available
+            try {
+                const storedUser = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser') || 'null');
+                if (storedUser && (storedUser.mobile || storedUser.applicantId)) {
+                    identityField.value = storedUser.mobile || storedUser.applicantId;
+                }
+            } catch(e) {}
+
+            // Evaluation functions using strict pattern checking
+            function checkIdentityValidity(value) {
+                const input = value.trim();
+                if (!input) return { isValid: false, type: null };
+
+                // Email structural definition check
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                // Flexible digits format matching local standards (e.g., +8801XXXXXXXXX, 01XXXXXXXXX) or generic numbers (10-14 digits)
+                const mobileRegex = /^(?:\+?88)?01[3-9]\d{8}$|^\d{10,14}$/;
+
+                // Profile ID pattern (e.g., PBL-2026-XXXXXX or numeric ID e.g. 1284647)
+                const profileIdRegex = /^(?:PBL-\d{4}-\d{5,8}|\d{6,8})$/i;
+
+                if (emailRegex.test(input)) {
+                    return { isValid: true, type: 'email' };
+                } else if (mobileRegex.test(input)) {
+                    return { isValid: true, type: 'mobile' };
+                } else if (profileIdRegex.test(input) || input.length >= 4) {
+                    return { isValid: true, type: 'profile_id' };
+                }
+
+                return { isValid: false, type: null };
+            }
+
+            function evaluateFormState() {
+                const identityCheck = checkIdentityValidity(identityField.value);
+                const isPasswordFilled = passwordField.value.trim().length > 0;
+
+                // Toggle the operational states matching the styling architecture
+                if (identityCheck.isValid && isPasswordFilled) {
+                    submitBtn.classList.add('active');
+                    submitBtn.removeAttribute('disabled');
+                } else {
+                    submitBtn.classList.remove('active');
+                    submitBtn.setAttribute('disabled', 'true');
+                }
+            }
+
+            // Real-time responsiveness setup
+            identityField.addEventListener('input', () => {
+                evaluateFormState();
+                if (loginAlert) loginAlert.classList.add('d-none');
+
+                // Remove error warning markers progressively as user updates inputs
+                if (identityField.classList.contains('is-invalid-format')) {
+                    const status = checkIdentityValidity(identityField.value);
+                    if (status.isValid || identityField.value.trim() === '') {
+                        identityField.classList.remove('is-invalid-format');
+                        identityFeedback.style.display = 'none';
+                    }
+                }
+            });
+
+            passwordField.addEventListener('input', () => {
+                evaluateFormState();
+                if (loginAlert) loginAlert.classList.add('d-none');
+            });
+
+            // Out-of-focus event warning checks
+            identityField.addEventListener('blur', () => {
+                const value = identityField.value.trim();
+                if (value !== '') {
+                    const status = checkIdentityValidity(value);
+                    if (!status.isValid) {
+                        identityField.classList.add('is-invalid-format');
+                        identityFeedback.style.display = 'block';
+                    }
+                }
+            });
+
+            // Initial check if fields were prefilled
+            evaluateFormState();
+
+            // Form Process Request Handler Intercept
+            signInForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const identityValue = identityField.value.trim();
+                const passwordValue = passwordField.value;
+                const validationStatus = checkIdentityValidity(identityValue);
+
+                if (!validationStatus.isValid) {
+                    identityField.classList.add('is-invalid-format');
+                    identityFeedback.style.display = 'block';
+                    return;
+                }
+
+                // Check against registered users
+                let users = [];
+                try {
+                    users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+                } catch (err) {
+                    users = [];
+                }
+
+                const cleanDigits = identityValue.replace(/\D/g, '').slice(-10);
+
+                let matchedUser = users.find(u => {
+                    const uPhoneDigits = (u.mobile || u.mobileNumber || '').replace(/\D/g, '').slice(-10);
+                    const isPhoneMatch = cleanDigits && uPhoneDigits && cleanDigits === uPhoneDigits;
+                    const isEmailMatch = u.email && u.email.toLowerCase() === identityValue.toLowerCase();
+                    const isIdMatch = u.applicantId && u.applicantId.toLowerCase() === identityValue.toLowerCase();
+                    return isPhoneMatch || isEmailMatch || isIdMatch;
+                });
+
+                let authenticatedUser = null;
+
+                if (matchedUser) {
+                    if (matchedUser.password === passwordValue) {
+                        authenticatedUser = matchedUser;
+                    } else {
+                        loginAlert.classList.remove('d-none');
+                        loginAlert.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Incorrect password. Please try again.';
+                        passwordField.focus();
+                        return;
+                    }
+                } else if (users.length > 0) {
+                    // Check if it's default demo admin user or fallback
+                    if (identityValue === '01712345678' || identityValue.toLowerCase() === 'fahim@pubali.com' || identityValue === '1284647') {
+                        authenticatedUser = {
+                            name: 'Md. Fahim',
+                            applicantName: 'Md. Fahim',
+                            applicantId: '1284647',
+                            mobile: '01712345678',
+                            isLoggedIn: true
+                        };
+                    } else {
+                        loginAlert.classList.remove('d-none');
+                        loginAlert.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Account not found. Please check your credentials or <a href="OTP.html" class="alert-link">Create Account</a>.';
+                        return;
+                    }
+                } else {
+                    // No users registered yet -> allow demo / first login
+                    authenticatedUser = {
+                        name: 'Md. Fahim',
+                        applicantName: 'Md. Fahim',
+                        applicantId: '1284647',
+                        mobile: identityValue,
+                        isLoggedIn: true
+                    };
+                }
+
+                // Sign in successfully
+                loginAlert.classList.add('d-none');
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('active');
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing in...';
+
+                // Save current session
+                localStorage.setItem('currentUser', JSON.stringify(authenticatedUser));
+                sessionStorage.setItem('currentUser', JSON.stringify(authenticatedUser));
+
+                // Sync with pubali profile data
+                try {
+                    const existingProfile = JSON.parse(localStorage.getItem('pubali_profile_data')) || {};
+                    localStorage.setItem('pubali_profile_data', JSON.stringify({
+                        ...existingProfile,
+                        basicInfo: {
+                            ...(existingProfile.basicInfo || {}),
+                            applicantName: authenticatedUser.name || authenticatedUser.applicantName || 'Md. Fahim',
+                            mobileNumber: authenticatedUser.mobile || authenticatedUser.mobileNumber || '01712345678'
+                        }
+                    }));
+                } catch(e) {}
+
+                // Redirect to main index.html
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 700);
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

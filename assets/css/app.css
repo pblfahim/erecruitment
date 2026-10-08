@@ -5998,3 +5998,51 @@ body.sidebar-collapsed .circular-action-bar {
   color: #ffffff !important;
   border-color: #059669 !important;
 }
+
+/* Dynamic Multi-Post Rows in Basic Information (Step 1) */
+.post-entry-row {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.post-entry-row:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+.post-entry-row .post-index-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+.btn-add-post {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1.5px dashed #059669;
+  background-color: #f0fdf4;
+  color: #047857;
+  transition: all 0.18s ease;
+}
+.btn-add-post:hover {
+  background-color: #059669;
+  color: #ffffff;
+  border-color: #059669;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+}
+.btn-remove-post {
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+.notice-post-divider {
+  border-bottom: 1.5px dashed #d1d5db;
+  margin: 24px 0 20px 0;
+}

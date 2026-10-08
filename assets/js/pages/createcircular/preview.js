@@ -362,13 +362,48 @@
     var currentViewMode = 'ALL'; // 'ALL', 'PAGE_1', 'PAGE_2'
     var currentZoom = 100;       // 85, 100, 115
 
+    function getPostsOf(circ) {
+      if (circ && Array.isArray(circ.posts) && circ.posts.length > 0) {
+        return circ.posts.map(function (p, idx) {
+          var postTitle = (p.post || p.name || ('Post ' + (idx + 1))).trim();
+          return {
+            id: p.id || ('post-' + (idx + 1)),
+            post: postTitle,
+            name: postTitle,
+            vacancies: parseInt(p.vacancies, 10) || 1
+          };
+        });
+      }
+      var rawPost = (circ && circ.post) ? String(circ.post).trim() : 'Officer (General)';
+      var vac = parseInt(circ && circ.vacancies, 10) || 1;
+      return [{
+        id: 'post-1',
+        post: rawPost,
+        name: rawPost,
+        vacancies: vac
+      }];
+    }
+
+    function rulesOfPost(circ, postId) {
+      var allRules = (circ && circ.eligibilityRules) || [];
+      var postList = getPostsOf(circ);
+      var firstPostId = postList.length ? postList[0].id : null;
+      return allRules.filter(function (r) {
+        if (!r || r.status === 'INACTIVE') return false;
+        if (r.postId) return r.postId === postId;
+        return postId === firstPostId;
+      });
+    }
+
     function getDocData() {
+      var postItems = getPostsOf(c);
+      var isMulti = postItems.length > 1;
       var post = (c && c.post) ? String(c.post).trim() : 'Officer (General)';
       var title = (c && c.title) ? String(c.title).trim() : ('Recruitment of ' + post);
       var isGraphicNotice = /graphic|design/i.test(post) || /graphic|design/i.test(title);
 
-      var rules = (c && c.eligibilityRules) || [];
-      var activeRules = rules.filter(function (r) { return r && r.status !== 'INACTIVE'; });
+      var allRules = (c && c.eligibilityRules) || [];
+      var activeRules = allRules.filter(function (r) { return r && r.status !== 'INACTIVE'; });
 
       // Step 1: Basic Information Mapping
       var code = (c && c.code) || 'HRD/REC/2026/01';
@@ -390,11 +425,145 @@
       var closingDate = fmt.date(applyEndRaw);
       var closingText = closingDate + (deadlineTime ? (' by ' + deadlineTime) : '');
 
+      var introPostLabel = isMulti
+        ? ('positions of <strong>' + postItems.map(function (p) { return fmt.esc(p.post); }).join(', ') + '</strong>')
+        : ('position of <strong>' + fmt.esc(post) + '</strong>');
+
       var intro = (c && c.intro) || (isGraphicNotice
         ? GRAPHIC_DESIGNER_DATA.intro
-        : ('Pubali Bank PLC., a leading largest private commercial bank with 519 online branches, 21 Islamic Banking Windows and 281 Sub-branches with a diverse and motivated workforce looking for versatile, high-energy and goal-oriented Bangladeshi citizens for the position of <strong>' + fmt.esc(post) + '</strong> who fulfil the following criteria and have the ability to contribute to the progressive growth of the Bank.'));
+        : ('Pubali Bank PLC., a leading largest private commercial bank with 519 online branches, 21 Islamic Banking Windows and 281 Sub-branches with a diverse and motivated workforce looking for versatile, high-energy and goal-oriented Bangladeshi citizens for the ' + introPostLabel + ' who fulfil the following criteria and have the ability to contribute to the progressive growth of the Bank.'));
 
-      // Section A: Key Job Responsibilities (from Step 1 or tailored to post)
+      // Build individual post sections (with individual Required terms & conditions per post)
+      var postSections = postItems.map(function (pItem) {
+        var pRules = rulesOfPost(c, pItem.id);
+        var isGraphic = /graphic|design/i.test(pItem.post);
+
+        var pPostLine = fmt.esc(pItem.post);
+        if (rankStr && rankStr.toLowerCase() !== pItem.post.toLowerCase()) {
+          pPostLine = fmt.esc(pItem.post) + ' in the rank of ' + fmt.esc(rankStr);
+        }
+
+        var pVacanciesText = formatVacancies(pItem.vacancies);
+
+        // Educational Qualification for this post
+        var degRule = pRules.find(function (r) { return r.type === 'DEGREE_LEVEL'; });
+        var subRule = pRules.find(function (r) { return r.type === 'SUBJECT'; });
+        var resRule = pRules.find(function (r) { return r.type === 'RESULT_GRADE'; });
+
+        var qualifications = [];
+        var degLevel = (degRule && degRule.degreeLevel) || (subRule && subRule.degreeLevel) || (c && c.minDegreeLevel) || '';
+        var allowedSubs = (subRule && subRule.allowedSubjects) ? String(subRule.allowedSubjects).trim() : '';
+
+        if (degLevel && allowedSubs) {
+          qualifications.push('Minimum <strong>' + fmt.esc(degLevel) + '</strong> degree in <strong>' + fmt.esc(allowedSubs) + '</strong> from any UGC recognized university.');
+        } else if (degLevel) {
+          qualifications.push('Minimum <strong>' + fmt.esc(degLevel) + '</strong> degree from any UGC recognized university.');
+        } else if (allowedSubs) {
+          qualifications.push('Graduation / Post-Graduation degree in <strong>' + fmt.esc(allowedSubs) + '</strong> from any UGC recognized university.');
+        } else if (isGraphic) {
+          qualifications.push('04 (four) years Diploma in Graphic Design/Fine Arts from a recognized polytechnic institute. Preference will be given to the candidates having Graduation in Graphic Design, Fine Arts, Creative Media, Multimedia, Visual Communication or related discipline from a reputed university.');
+        } else {
+          qualifications.push('Minimum <strong>Bachelor/Master</strong> degree from any UGC recognized university.');
+        }
+
+        if (degRule && degRule.mandatory === false) {
+          qualifications.push('Higher academic degrees or additional relevant qualifications will be given preference.');
+        }
+
+        qualifications.push('Only published result (by the competent authority) will be accepted. Testimonial for this matter will not be accepted.');
+        qualifications.push('Candidates having foreign degree must obtain equivalence certificate from University Grants Commission (UGC) of Bangladesh.');
+
+        if (resRule && (resRule.divisionText || resRule.minGpa || resRule.minCgpa)) {
+          var divText = resRule.divisionText ? (resRule.divisionText + ' Division/Class') : '3rd Division/Class';
+          var gpaParts = [];
+          if (resRule.minGpa) gpaParts.push('minimum GPA of ' + Number(resRule.minGpa).toFixed(2) + ' on a 05.0 scale (Secondary/Higher Secondary)');
+          if (resRule.minCgpa) gpaParts.push('minimum CGPA of ' + Number(resRule.minCgpa).toFixed(2) + ' on a 04.0 scale (Bachelor or Higher Degree)');
+          var gpaText = gpaParts.length ? (', and ' + gpaParts.join(', and ') + ' is required') : '';
+          qualifications.push('<strong>No ' + fmt.esc(divText) + '/GPA/CGPA in any academic examination is acceptable' + gpaText + '.</strong>');
+        } else {
+          qualifications.push('<strong>No 3rd Division/Class/GPA/CGPA in any academic examination is acceptable.</strong>');
+        }
+
+        // Additional / technical criteria defined for this post (OTHERS rules)
+        var pOtherRules = pRules.filter(function (r) { return r.type === 'OTHERS'; });
+        pOtherRules.forEach(function (r) {
+          var items = ERec.seed.ExcelList(r.otherCriteria);
+          items.forEach(function (it) {
+            if (it) {
+              if (/^strong|practical|hands-on|knowledge|ability|familiarity|must|certified|certification/i.test(it)) {
+                qualifications.push(fmt.esc(it) + (it.slice(-1) === '.' ? '' : '.'));
+              } else {
+                qualifications.push('Additional requirement: ' + fmt.esc(it) + '.');
+              }
+            }
+          });
+        });
+
+        // Experience for this post
+        var expRule = pRules.find(function (r) { return r.type === 'EXPERIENCE'; });
+        var experience = [];
+        var ageRule = pRules.find(function (r) { return r.type === 'AGE'; });
+        var expAsOnRaw = (ageRule && ageRule.asOn) || applyEndRaw;
+        var expAsOnFormatted = formatDotDate(expAsOnRaw) || fmt.date(expAsOnRaw);
+
+        if (expRule && expRule.minYears !== '' && expRule.minYears !== null && !isNaN(expRule.minYears)) {
+          var minYearsNum = parseFloat(expRule.minYears);
+          if (minYearsNum > 0) {
+            experience.push('At least ' + formatYears(minYearsNum) + ' of professional experience in the relevant field as on ' + expAsOnFormatted + '.');
+          } else {
+            experience.push('Fresh candidates are eligible to apply. No prior professional experience is required as on ' + expAsOnFormatted + '.');
+          }
+        } else if (isGraphic) {
+          experience.push('At least 02 (two) years of professional experience in the relevant field as on ' + expAsOnFormatted + '.');
+        } else {
+          experience.push('At least 02 (two) years of professional experience in the relevant discipline as on ' + expAsOnFormatted + '.');
+        }
+
+        if (expRule && expRule.industry) {
+          experience.push('Experience in ' + fmt.esc(expRule.industry) + ' or reputable corporate houses will be preferred.');
+        } else if (isGraphic) {
+          experience.push('Experience in an Advertising Agency, Digital Media Agency, Corporate House will be preferred.');
+        } else {
+          experience.push('Experience in financial institutions, banking sector or reputable corporate houses will be preferred.');
+        }
+
+        if (expRule && (expRule.designationKeywords || expRule.responsibilityKeywords)) {
+          var desigKeywords = ERec.seed.ExcelList(expRule.designationKeywords);
+          var respKeywords = ERec.seed.ExcelList(expRule.responsibilityKeywords);
+          var expParts = [];
+          if (desigKeywords.length) expParts.push('working as ' + desigKeywords.join(' / '));
+          if (respKeywords.length) expParts.push('handling ' + respKeywords.join(' / '));
+          experience.push('Practical working exposure ' + expParts.join(' and ') + ' is highly desirable.');
+        } else if (isGraphic) {
+          experience.push('Practical experience in preparing short-form digital video content and motion graphics for social media platforms is highly desirable.');
+        } else {
+          experience.push('Demonstrated analytical mindset and proficiency in operational workflows.');
+        }
+
+        // Age Limit for this post
+        var maxAge = (ageRule && ageRule.maxAge) ? ageRule.maxAge : ((c && c.maxAge) || (isGraphic ? 32 : 30));
+        var ageAsOnRaw = (ageRule && ageRule.asOn) || applyEndRaw;
+        var ageAsOnText = fmt.date(ageAsOnRaw);
+        var ageLimitText;
+        if (ageRule && ageRule.minAge && ageRule.minAge > 18) {
+          ageLimitText = 'Between ' + ageRule.minAge + ' and ' + maxAge + ' years as on ' + ageAsOnText + '. No affidavit in respect of age will be acceptable.';
+        } else {
+          ageLimitText = 'Not over ' + maxAge + ' years as on ' + ageAsOnText + '. No affidavit in respect of age will be acceptable.';
+        }
+
+        return {
+          id: pItem.id,
+          post: pItem.post,
+          postLine: pPostLine,
+          vacancies: pItem.vacancies,
+          vacanciesText: pVacanciesText,
+          qualifications: qualifications,
+          experience: experience,
+          ageLimitText: ageLimitText
+        };
+      });
+
+      // Section A: Key Job Responsibilities (general / overview)
       var responsibilities = [];
       if (c && c.responsibilities && Array.isArray(c.responsibilities) && c.responsibilities.length) {
         responsibilities = c.responsibilities.map(function (item) { return fmt.esc(item); });
@@ -420,88 +589,13 @@
         ];
       }
 
-      // Section B: Educational Qualification (Step 2: DEGREE_LEVEL, SUBJECT, RESULT_GRADE)
-      var degRule = activeRules.find(function (r) { return r.type === 'DEGREE_LEVEL'; });
-      var subRule = activeRules.find(function (r) { return r.type === 'SUBJECT'; });
-      var resRule = activeRules.find(function (r) { return r.type === 'RESULT_GRADE'; });
+      // Primary post qualifications & experience fallbacks for backward compatibility
+      var primarySec = postSections[0] || {};
+      var qualifications = primarySec.qualifications || [];
+      var experience = primarySec.experience || [];
+      var ageLimitText = primarySec.ageLimitText || ('Not over 30 years as on ' + fmt.date(applyEndRaw) + '.');
 
-      var qualifications = [];
-      var degLevel = (degRule && degRule.degreeLevel) || (subRule && subRule.degreeLevel) || (c && c.minDegreeLevel) || '';
-      var allowedSubs = (subRule && subRule.allowedSubjects) ? String(subRule.allowedSubjects).trim() : '';
-
-      if (degLevel && allowedSubs) {
-        qualifications.push('Minimum <strong>' + fmt.esc(degLevel) + '</strong> degree in <strong>' + fmt.esc(allowedSubs) + '</strong> from any UGC recognized university.');
-      } else if (degLevel) {
-        qualifications.push('Minimum <strong>' + fmt.esc(degLevel) + '</strong> degree from any UGC recognized university.');
-      } else if (allowedSubs) {
-        qualifications.push('Graduation / Post-Graduation degree in <strong>' + fmt.esc(allowedSubs) + '</strong> from any UGC recognized university.');
-      } else if (isGraphicNotice) {
-        qualifications.push('04 (four) years Diploma in Graphic Design/Fine Arts from a recognized polytechnic institute. Preference will be given to the candidates having Graduation in Graphic Design, Fine Arts, Creative Media, Multimedia, Visual Communication or related discipline from a reputed university.');
-      } else {
-        qualifications.push('Minimum <strong>Bachelor/Master</strong> degree from any UGC recognized university.');
-      }
-
-      if (degRule && degRule.mandatory === false) {
-        qualifications.push('Higher academic degrees or additional relevant qualifications will be given preference.');
-      }
-
-      qualifications.push('Only published result (by the competent authority) will be accepted. Testimonial for this matter will not be accepted.');
-      qualifications.push('Candidates having foreign degree must obtain equivalence certificate from University Grants Commission (UGC) of Bangladesh.');
-
-      if (resRule && (resRule.divisionText || resRule.minGpa || resRule.minCgpa)) {
-        var divText = resRule.divisionText ? (resRule.divisionText + ' Division/Class') : '3rd Division/Class';
-        var gpaParts = [];
-        if (resRule.minGpa) gpaParts.push('minimum GPA of ' + Number(resRule.minGpa).toFixed(2) + ' on a 05.0 scale (Secondary/Higher Secondary)');
-        if (resRule.minCgpa) gpaParts.push('minimum CGPA of ' + Number(resRule.minCgpa).toFixed(2) + ' on a 04.0 scale (Bachelor or Higher Degree)');
-        var gpaText = gpaParts.length ? (', and ' + gpaParts.join(', and ') + ' is required') : '';
-        qualifications.push('<strong>No ' + fmt.esc(divText) + '/GPA/CGPA in any academic examination is acceptable' + gpaText + '.</strong>');
-      } else {
-        qualifications.push('<strong>No 3rd Division/Class/GPA/CGPA in any academic examination is acceptable.</strong>');
-      }
-
-      // Section C: Experience (Step 2: EXPERIENCE)
-      var expRule = activeRules.find(function (r) { return r.type === 'EXPERIENCE'; });
-      var experience = [];
-
-      var ageRule = activeRules.find(function (r) { return r.type === 'AGE'; });
-      var expAsOnRaw = (ageRule && ageRule.asOn) || applyEndRaw;
-      var expAsOnFormatted = formatDotDate(expAsOnRaw) || fmt.date(expAsOnRaw);
-
-      if (expRule && expRule.minYears !== '' && expRule.minYears !== null && !isNaN(expRule.minYears)) {
-        var minYearsNum = parseFloat(expRule.minYears);
-        if (minYearsNum > 0) {
-          experience.push('At least ' + formatYears(minYearsNum) + ' of professional experience in the relevant field as on ' + expAsOnFormatted + '.');
-        } else {
-          experience.push('Fresh candidates are eligible to apply. No prior professional experience is required as on ' + expAsOnFormatted + '.');
-        }
-      } else if (isGraphicNotice) {
-        experience.push('At least 02 (two) years of professional experience in the relevant field as on ' + expAsOnFormatted + '.');
-      } else {
-        experience.push('At least 02 (two) years of professional experience in the relevant discipline as on ' + expAsOnFormatted + '.');
-      }
-
-      if (expRule && expRule.industry) {
-        experience.push('Experience in ' + fmt.esc(expRule.industry) + ' or reputable corporate houses will be preferred.');
-      } else if (isGraphicNotice) {
-        experience.push('Experience in an Advertising Agency, Digital Media Agency, Corporate House will be preferred.');
-      } else {
-        experience.push('Experience in financial institutions, banking sector or reputable corporate houses will be preferred.');
-      }
-
-      if (expRule && (expRule.designationKeywords || expRule.responsibilityKeywords)) {
-        var desigKeywords = ERec.seed.ExcelList(expRule.designationKeywords);
-        var respKeywords = ERec.seed.ExcelList(expRule.responsibilityKeywords);
-        var expParts = [];
-        if (desigKeywords.length) expParts.push('working as ' + desigKeywords.join(' / '));
-        if (respKeywords.length) expParts.push('handling ' + respKeywords.join(' / '));
-        experience.push('Practical working exposure ' + expParts.join(' and ') + ' is highly desirable.');
-      } else if (isGraphicNotice) {
-        experience.push('Practical experience in preparing short-form digital video content and motion graphics for social media platforms is highly desirable.');
-      } else {
-        experience.push('Demonstrated analytical mindset and proficiency in operational workflows.');
-      }
-
-      // Section D: Technical Proficiency (Step 2: OTHERS)
+      // Technical Proficiency (Step 2: OTHERS)
       var otherRules = activeRules.filter(function (r) { return r.type === 'OTHERS'; });
       var customProficiencies = [];
       otherRules.forEach(function (r) {
@@ -545,18 +639,7 @@
         ];
       }
 
-      // Section E: Age Limit (Step 2: AGE)
-      var maxAge = (ageRule && ageRule.maxAge) ? ageRule.maxAge : ((c && c.maxAge) || (isGraphicNotice ? 32 : 30));
-      var ageAsOnRaw = (ageRule && ageRule.asOn) || applyEndRaw;
-      var ageAsOnText = fmt.date(ageAsOnRaw);
-      var ageLimitText;
-      if (ageRule && ageRule.minAge && ageRule.minAge > 18) {
-        ageLimitText = 'Between ' + ageRule.minAge + ' and ' + maxAge + ' years as on ' + ageAsOnText + '. No affidavit in respect of age will be acceptable.';
-      } else {
-        ageLimitText = 'Not over ' + maxAge + ' years as on ' + ageAsOnText + '. No affidavit in respect of age will be acceptable.';
-      }
-
-      // Section F: General Conditions & Selection Sequence (from Step 1 stages)
+      // General Conditions & Remuneration
       var remunerationText;
       if (c && c.remunerationText) {
         remunerationText = c.remunerationText;
@@ -608,6 +691,7 @@
         postLine: postLine,
         vacanciesText: vacanciesText,
         intro: intro,
+        postSections: postSections,
         responsibilities: responsibilities,
         qualifications: qualifications,
         experience: experience,
@@ -641,6 +725,44 @@
     }
 
     function buildPage1Html(data) {
+      var postSectionsHtml = (data.postSections || []).map(function (pData, pIdx) {
+        var postPrefix = (data.postSections && data.postSections.length > 1) ? ((pIdx + 1) + '. ') : '';
+        var isLast = pIdx === (data.postSections.length - 1);
+        var dividerHtml = (!isLast) ? '<div class="notice-post-divider my-4 border-bottom border-secondary-subtle"></div>' : '';
+
+        return '<!-- Post Section ' + (pIdx + 1) + ': ' + fmt.esc(pData.post) + ' -->' +
+          '<div class="notice-post-block mb-3">' +
+          '<!-- Position & Vacancy -->' +
+          '<div class="notice-post-line">' + postPrefix + pData.postLine + '</div>' +
+          '<div class="notice-post-count">No. of Post: ' + pData.vacanciesText + '</div>' +
+
+          '<!-- Terms and conditions header -->' +
+          '<div class="notice-terms-title">Required terms &amp; conditions are as follows:</div>' +
+
+          '<!-- Section A: Educational Qualification -->' +
+          '<div class="notice-sec-heading">A. Educational Qualification:</div>' +
+          '<ul class="notice-bullet-list">' +
+          pData.qualifications.map(function (item) {
+            return '<li>' + item + '</li>';
+          }).join('') +
+          '</ul>' +
+
+          '<!-- Section B: Experience -->' +
+          '<div class="notice-sec-heading">B. Experience:</div>' +
+          '<ul class="notice-bullet-list mb-3">' +
+          pData.experience.map(function (item) {
+            return '<li>' + item + '</li>';
+          }).join('') +
+          '</ul>' +
+
+          '<!-- Section C: Age limit -->' +
+          '<div class="mb-3" style="font-size: 13px; line-height: 1.6; color: #111827;">' +
+          '<strong>C. Age limit:</strong> ' + pData.ageLimitText +
+          '</div>' +
+          '</div>' +
+          dividerHtml;
+      }).join('');
+
       return '<div class="notice-sheet" id="notice-sheet-1" style="min-height: auto;">' +
         '<div class="notice-page-badge">Page 1 of 1</div>' +
 
@@ -652,36 +774,10 @@
         '<!-- Opening Paragraph -->' +
         '<div class="notice-intro-text">' + data.intro + '</div>' +
 
-        '<!-- Position & Vacancy -->' +
-        '<div class="notice-post-line">' + data.postLine + '</div>' +
-        '<div class="notice-post-count">No. of Post: ' + data.vacanciesText + '</div>' +
+        postSectionsHtml +
 
-        '<!-- Terms and conditions header -->' +
-        '<div class="notice-terms-title">Required terms &amp; conditions are as follows:</div>' +
-
-        '<!-- Section A: Educational Qualification -->' +
-        '<div class="notice-sec-heading">A. Educational Qualification:</div>' +
-        '<ul class="notice-bullet-list">' +
-        data.qualifications.map(function (item) {
-          return '<li>' + item + '</li>';
-        }).join('') +
-        '</ul>' +
-
-        '<!-- Section B: Experience -->' +
-        '<div class="notice-sec-heading">B. Experience:</div>' +
-        '<ul class="notice-bullet-list mb-3">' +
-        data.experience.map(function (item) {
-          return '<li>' + item + '</li>';
-        }).join('') +
-        '</ul>' +
-
-        '<!-- Section C: Age limit -->' +
-        '<div class="mb-3" style="font-size: 13px; line-height: 1.6; color: #111827;">' +
-        '<strong>C. Age limit:</strong> ' + data.ageLimitText +
-        '</div>' +
-
-        '<!-- Section D: General Conditions -->' +
-        '<div class="notice-sec-heading">D. General Conditions:</div>' +
+        '<!-- General Conditions -->' +
+        '<div class="notice-sec-heading">' + (data.postSections && data.postSections.length > 1 ? 'General Conditions:' : 'D. General Conditions:') + '</div>' +
         '<ol class="notice-numbered-list">' +
         '<li><strong>Remuneration:</strong> ' + data.remunerationText + '</li>' +
         '<li>In-house candidates are not permitted to apply.</li>' +

@@ -92,9 +92,10 @@
         var activeStg = pipe.activeStage(c.id);
         var step = activeStg ? pipe.currentStep(activeStg) : null;
         var href = step ? step.route : ('#/circular/' + c.id);
-        html += '<a class="nav-link-custom nav-link-x' + (active ? ' active' : '') + '" href="' + href + '" title="' + fmt.esc(c.title) + '">' +
+        var circLabel = (c.title || c.navTitle || c.post || 'Circular').trim();
+        html += '<a class="nav-link-custom nav-link-x' + (active ? ' active' : '') + '" href="' + href + '" title="' + fmt.esc(c.title || circLabel) + '">' +
           '<i class="bi bi-file-earmark-text"></i>' +
-          '<span class="text-truncate">' + fmt.esc(c.navTitle || c.post) + '</span>' +
+          '<span class="text-truncate">' + fmt.esc(circLabel) + '</span>' +
           '</a>';
       });
     }

@@ -449,7 +449,7 @@
     circularDefs.forEach(function (def, ci) {
       db.circulars.push({
         id: def.id, code: def.code, title: def.title, post: def.post,
-        navTitle: def.navTitle || def.post,
+        navTitle: def.title || def.navTitle || def.post,
         vacancies: def.vacancies,
         applyStart: def.applyStart,
         applyEnd: def.applyEnd, applyEndTime: '17:00',

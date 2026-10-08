@@ -1,5 +1,5 @@
 /* Create Job Posting - Basic Information page.
-   Matches the design from the uploaded PDF specifications. */
+   Supports multiple posts under one circular with structured First Group and Second Group. */
 (function (global) {
   'use strict';
 
@@ -22,7 +22,7 @@
 
     ERec.router.setCrumbs([
       { label: 'Job Circulars', href: '#/circulars' },
-      { label: isEdit ? ('Edit ' + existingCirc.post) : 'Create Job Posting' }
+      { label: isEdit ? ('Edit ' + (existingCirc.title || existingCirc.post || 'Circular')) : 'Create Job Posting' }
     ]);
 
     var y = new Date().getFullYear();
@@ -50,6 +50,67 @@
     if (defaultPost === 'Officer (General)') defaultPost = '';
     if (defaultTitle && defaultTitle.indexOf('Officer (General)') !== -1) defaultTitle = '';
 
+    // Initialize posts list (support multiple posts per circular)
+    var posts = [];
+    if (isEdit && existingCirc && Array.isArray(existingCirc.posts) && existingCirc.posts.length > 0) {
+      posts = existingCirc.posts.map(function (p) {
+        var v = p.vacancies != null ? parseInt(p.vacancies, 10) : 2;
+        return {
+          post: (p.post || p.name || '').trim(),
+          vacancies: v < 10 ? fmt.pad(v, 2) : String(v)
+        };
+      });
+    } else if (!isEdit && draft && Array.isArray(draft.posts) && draft.posts.length > 0) {
+      posts = draft.posts.map(function (p) {
+        var v = p.vacancies != null ? parseInt(p.vacancies, 10) : 2;
+        return {
+          post: (p.post || p.name || '').trim(),
+          vacancies: v < 10 ? fmt.pad(v, 2) : String(v)
+        };
+      });
+    } else {
+      var initialPostName = defaultPost || '';
+      var initialVacStr = defaultVac || '02';
+      posts = [{ post: initialPostName, vacancies: initialVacStr }];
+    }
+
+    posts.forEach(function (p) {
+      if (p.post === 'Officer (General)') p.post = '';
+    });
+
+    if (posts.length === 0) {
+      posts = [{ post: '', vacancies: '02' }];
+    }
+
+    function buildPostsHtml() {
+      return posts.map(function (item, idx) {
+        var isOnly = posts.length === 1;
+        var postLabel = posts.length > 1
+          ? ('<span class="badge bg-light text-secondary border me-1">Post #' + (idx + 1) + '</span> Post <span class="text-danger">*</span>')
+          : ('Post <span class="text-danger">*</span>');
+        var vacLabel = 'Vacancies <span class="text-danger">*</span>';
+        var isFirst = idx === 0;
+
+        return '<div class="post-entry-row mb-2" data-post-index="' + idx + '">' +
+          '<div class="row g-2 align-items-end">' +
+          '<div class="col-md-7 col-12">' +
+          '<label class="form-label">' + postLabel + '</label>' +
+          '<input type="text" class="form-control f-post-input"' + (isFirst ? ' id="f-post"' : '') + ' value="' + fmt.esc(item.post) + '" placeholder="e.g. Senior Officer" data-field="post">' +
+          '</div>' +
+          '<div class="col-md-4 col-9">' +
+          '<label class="form-label">' + vacLabel + '</label>' +
+          '<input type="text" class="form-control f-vac-input"' + (isFirst ? ' id="f-vac"' : '') + ' value="' + fmt.esc(item.vacancies) + '" placeholder="02" inputmode="numeric" data-field="vacancies">' +
+          '</div>' +
+          '<div class="col-md-1 col-3">' +
+          '<button type="button" class="btn btn-outline-danger btn-remove-post w-100" data-remove-index="' + idx + '" title="' + (isOnly ? 'At least one post is required' : 'Remove this post') + '"' + (isOnly ? ' disabled style="opacity: 0.35; cursor: not-allowed;"' : '') + '>' +
+          '<i class="bi bi-trash3"></i>' +
+          '</button>' +
+          '</div>' +
+          '</div>' +
+          '</div>';
+      }).join('');
+    }
+
     function buildSelectedChipsHtml() {
       if (!selectedStages.length) {
         return '<div class="p-3 text-center text-muted fs-12 w-100 bg-white rounded-3 border border-dashed">' +
@@ -58,7 +119,6 @@
       }
       var cardsHtml = selectedStages.map(function (key, idx) {
         var opt = STAGE_OPTIONS.find(function (x) { return x.key === key; }) || { key: key, label: key, icon: 'bi-check2', subtitle: 'Stage ' + (idx + 1) };
-        var canRemove = true;
         var subText = (idx === 0 && selectedStages.length === 1) ? 'Single Stage Pipeline' : (opt.subtitle || ('Stage ' + (idx + 1)));
         return '<div class="seq-step-card" data-stage="' + key + '">' +
           '<div class="d-flex align-items-center gap-2">' +
@@ -116,25 +176,38 @@
       (isEdit ? '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-12">Editing ' + fmt.esc(existingCirc.code) + '</span>' : '') +
       '</div>' +
       '<div class="card-posting-body">' +
+
+      '<!-- First Group: Circular Information -->' +
+      '<div class="posting-first-group mb-4">' +
+      '<div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">' +
+      '<span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-0.5 fs-11 fw-bold">1</span>' +
+      '<span class="fw-bold text-dark fs-13">First Group: Circular Details</span>' +
+      '</div>' +
       '<div class="row g-3">' +
+      '<!-- 1. Circular title * (col-md-6) -->' +
       '<div class="col-md-6">' +
-      '<label class="form-label">Circular title <span class="text-danger">*</span></label>' +
+      '<label class="form-label" for="f-title">Circular title <span class="text-danger">*</span></label>' +
       '<input type="text" class="form-control" id="f-title" value="' + fmt.esc(defaultTitle) + '" placeholder="e.g. Recruitment of Senior Officer - ' + y + '">' +
       '</div>' +
+      '<!-- 2. Circular no. * (col-md-6) -->' +
       '<div class="col-md-6">' +
-      '<label class="form-label">Circular no. <span class="text-danger">*</span></label>' +
+      '<label class="form-label" for="f-code">Circular no. <span class="text-danger">*</span></label>' +
       '<input type="text" class="form-control" id="f-code" value="' + fmt.esc(defaultCode) + '" placeholder="e.g. HRD/REC/' + y + '/01">' +
       '</div>' +
-      '<div class="col-md-6">' +
-      '<label class="form-label">Post <span class="text-danger">*</span></label>' +
-      '<input type="text" class="form-control" id="f-post" value="' + fmt.esc(defaultPost) + '" placeholder="e.g. Senior Officer">' +
+      '<!-- 3. Application opens * (col-md-4) -->' +
+      '<div class="col-md-4">' +
+      '<label class="form-label" for="f-start">Application opens <span class="text-danger">*</span></label>' +
+      '<input type="date" class="form-control" id="f-start" value="' + defaultStart + '">' +
       '</div>' +
-      '<div class="col-md-3">' +
-      '<label class="form-label">Vacancies <span class="text-danger">*</span></label>' +
-      '<input type="text" class="form-control" id="f-vac" value="' + defaultVac + '" placeholder="02" inputmode="numeric">' +
+      '<!-- 4. Application closes * (col-md-4) -->' +
+      '<div class="col-md-4">' +
+      '<label class="form-label" for="f-end">Application closes <span class="text-danger">*</span></label>' +
+      '<input type="date" class="form-control" id="f-end" value="' + defaultEnd + '" min="' + defaultStart + '">' +
       '</div>' +
-      (!isEdit ? ('<div class="col-md-3">' +
-        '<label class="form-label">Initial applicants</label>' +
+      '<!-- 5. Initial applicants (col-md-4) -->' +
+      '<div class="col-md-4">' +
+      '<label class="form-label" for="f-pool">Initial applicants</label>' +
+      (!isEdit ? (
         '<select class="form-select" id="f-pool">' +
         '<option value="10"' + (defaultPool === 10 ? ' selected' : '') + '>Generate 10 test candidates</option>' +
         '<option value="15"' + (defaultPool === 15 ? ' selected' : '') + '>Generate 15 test candidates</option>' +
@@ -142,15 +215,10 @@
         '<option value="35"' + (defaultPool === 35 ? ' selected' : '') + '>Generate 35 test candidates</option>' +
         '<option value="50"' + (defaultPool === 50 ? ' selected' : '') + '>Generate 50 test candidates</option>' +
         '<option value="0"' + (defaultPool === 0 ? ' selected' : '') + '>Start with 0 (await online applications / Excel)</option>' +
-        '</select>' +
-        '</div>') : '') +
-      '<div class="col-md-6">' +
-      '<label class="form-label" for="f-start">Application opens <span class="text-danger">*</span></label>' +
-      '<input type="date" class="form-control" id="f-start" value="' + defaultStart + '">' +
-      '</div>' +
-      '<div class="col-md-6">' +
-      '<label class="form-label" for="f-end">Application closes <span class="text-danger">*</span></label>' +
-      '<input type="date" class="form-control" id="f-end" value="' + defaultEnd + '" min="' + defaultStart + '">' +
+        '</select>'
+      ) : (
+        '<input type="text" class="form-control bg-light" id="f-pool-disabled" value="Initialized in active database" disabled readonly title="Applicant pool is fixed for this circular">'
+      )) +
       '</div>' +
       '<div class="col-12 mt-2">' +
       '<div class="d-flex align-items-center gap-2 p-2 px-3 rounded-2 fs-12 bg-light text-muted border" id="date-window-summary">' +
@@ -158,6 +226,31 @@
       '</div>' +
       '</div>' +
       '</div>' +
+      '</div>' +
+
+      '<!-- Second Group: Post & Vacancies -->' +
+      '<div class="posts-group-section pt-2">' +
+      '<div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">' +
+      '<div class="d-flex align-items-center gap-2">' +
+      '<span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-0.5 fs-11 fw-bold">2</span>' +
+      '<span class="fw-bold text-dark fs-13">Second Group: Posts &amp; Vacancies</span>' +
+      '</div>' +
+      '<span class="badge bg-light text-secondary border px-2 py-1 fs-11" id="posts-summary-badge">1 Post</span>' +
+      '</div>' +
+
+      '<div id="posts-list-container" class="d-flex flex-column gap-2 mb-3">' +
+      buildPostsHtml() +
+      '</div>' +
+
+      '<!-- Add more button under the group -->' +
+      '<div>' +
+      '<button type="button" class="btn btn-add-post" id="btn-add-post">' +
+      '<i class="bi bi-plus-circle"></i>' +
+      '<span>Add More Post</span>' +
+      '</button>' +
+      '</div>' +
+      '</div>' +
+
       '</div>' +
       '</div>' +
 
@@ -219,30 +312,109 @@
     view.innerHTML = html;
     ui.bindPostingWizard(view);
 
-    // Vacancies input 2-digit padding & numeric keyboard controls
-    var vacInput = view.querySelector('#f-vac');
-    if (vacInput) {
-      vacInput.addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '');
-      });
-      vacInput.addEventListener('blur', function () {
-        var num = parseInt(this.value, 10);
-        if (!isNaN(num) && num > 0) {
-          this.value = num < 10 ? fmt.pad(num, 2) : String(num);
-        } else {
-          this.value = '02';
+    function syncPostsFromDom() {
+      var rows = view.querySelectorAll('.post-entry-row');
+      if (!rows || rows.length === 0) return;
+      rows.forEach(function (row, idx) {
+        if (idx < posts.length) {
+          var pInput = row.querySelector('.f-post-input');
+          var vInput = row.querySelector('.f-vac-input');
+          if (pInput) posts[idx].post = pInput.value;
+          if (vInput) posts[idx].vacancies = vInput.value;
         }
       });
-      vacInput.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          var num = (parseInt(this.value, 10) || 0) + 1;
-          this.value = num < 10 ? fmt.pad(num, 2) : String(num);
-        } else if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          var num = Math.max(1, (parseInt(this.value, 10) || 1) - 1);
-          this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+    }
+
+    function updatePostsSummary() {
+      var badge = view.querySelector('#posts-summary-badge');
+      if (!badge) return;
+      var totalVac = 0;
+      posts.forEach(function (p) {
+        totalVac += parseInt(p.vacancies, 10) || 0;
+      });
+      var pText = posts.length === 1 ? '1 Post' : (posts.length + ' Posts');
+      var vText = totalVac === 1 ? '1 Vacancy' : (totalVac + ' Vacancies');
+      badge.textContent = pText + ' · ' + vText;
+    }
+
+    function bindPostRowEvents() {
+      var container = view.querySelector('#posts-list-container');
+      if (!container) return;
+
+      container.querySelectorAll('.f-post-input').forEach(function (input) {
+        input.addEventListener('input', function () {
+          syncPostsFromDom();
+        });
+      });
+
+      container.querySelectorAll('.f-vac-input').forEach(function (vacInput) {
+        vacInput.addEventListener('input', function () {
+          this.value = this.value.replace(/\D/g, '');
+          syncPostsFromDom();
+          updatePostsSummary();
+        });
+        vacInput.addEventListener('blur', function () {
+          var num = parseInt(this.value, 10);
+          if (!isNaN(num) && num > 0) {
+            this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+          } else {
+            this.value = '01';
+          }
+          syncPostsFromDom();
+          updatePostsSummary();
+        });
+        vacInput.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            var num = (parseInt(this.value, 10) || 0) + 1;
+            this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+            syncPostsFromDom();
+            updatePostsSummary();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            var num = Math.max(1, (parseInt(this.value, 10) || 1) - 1);
+            this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+            syncPostsFromDom();
+            updatePostsSummary();
+          }
+        });
+      });
+
+      container.querySelectorAll('.btn-remove-post').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (posts.length <= 1) return;
+          var idx = parseInt(btn.dataset.removeIndex, 10);
+          syncPostsFromDom();
+          posts.splice(idx, 1);
+          renderPosts();
+        });
+      });
+    }
+
+    function renderPosts(focusIndex) {
+      var container = view.querySelector('#posts-list-container');
+      if (!container) return;
+      container.innerHTML = buildPostsHtml();
+      bindPostRowEvents();
+      updatePostsSummary();
+
+      if (typeof focusIndex === 'number') {
+        var inputs = view.querySelectorAll('.f-post-input');
+        if (inputs[focusIndex]) {
+          inputs[focusIndex].focus();
         }
+      }
+    }
+
+    bindPostRowEvents();
+    updatePostsSummary();
+
+    var addPostBtn = view.querySelector('#btn-add-post');
+    if (addPostBtn) {
+      addPostBtn.addEventListener('click', function () {
+        syncPostsFromDom();
+        posts.push({ post: '', vacancies: '01' });
+        renderPosts(posts.length - 1);
       });
     }
 
@@ -397,14 +569,13 @@
     view.querySelector('#btn-save-next').addEventListener('click', function () {
       var title = (view.querySelector('#f-title').value || '').trim();
       var code = (view.querySelector('#f-code').value || '').trim();
-      var post = (view.querySelector('#f-post').value || '').trim();
-      var vac = parseInt(view.querySelector('#f-vac').value, 10) || 2;
       var rawStart = (view.querySelector('#f-start').value || '').trim();
       var rawEnd = (view.querySelector('#f-end').value || '').trim();
 
+      syncPostsFromDom();
+
       if (!title) { ui.toast('Please enter circular title', 'warning'); return; }
       if (!code) { ui.toast('Please enter circular no.', 'warning'); return; }
-      if (!post) { ui.toast('Please enter post name', 'warning'); return; }
       if (!rawStart) { ui.toast('Please select application opening date', 'warning'); return; }
       if (!rawEnd) { ui.toast('Please select application closing date', 'warning'); return; }
 
@@ -415,18 +586,59 @@
         ui.toast('Application closing date cannot be earlier than opening date', 'warning');
         return;
       }
+
+      if (!posts.length) {
+        ui.toast('Please add at least one post', 'warning');
+        return;
+      }
+
+      var emptyIdx = posts.findIndex(function (p) { return !p.post || !p.post.trim(); });
+      if (emptyIdx >= 0) {
+        ui.toast('Please enter post name for ' + (posts.length > 1 ? ('Post #' + (emptyIdx + 1)) : 'the post'), 'warning');
+        var inputs = view.querySelectorAll('.f-post-input');
+        if (inputs[emptyIdx]) inputs[emptyIdx].focus();
+        return;
+      }
+
+      var invalidVacIdx = posts.findIndex(function (p) {
+        var num = parseInt(p.vacancies, 10);
+        return isNaN(num) || num <= 0;
+      });
+      if (invalidVacIdx >= 0) {
+        ui.toast('Please enter a valid vacancy count for ' + (posts.length > 1 ? ('Post #' + (invalidVacIdx + 1)) : 'the post'), 'warning');
+        var vacInputs = view.querySelectorAll('.f-vac-input');
+        if (vacInputs[invalidVacIdx]) vacInputs[invalidVacIdx].focus();
+        return;
+      }
+
       if (!selectedStages.length) {
         ui.toast('Please select at least one examination stage (MCQ, Written, or Viva voce)', 'warning');
         return;
       }
 
+      var totalVac = 0;
+      var formattedPosts = posts.map(function (p, idx) {
+        var v = parseInt(p.vacancies, 10) || 1;
+        totalVac += v;
+        return {
+          id: p.id || ('post-' + (idx + 1)),
+          post: p.post.trim(),
+          name: p.post.trim(),
+          vacancies: v
+        };
+      });
+
+      var combinedPost = formattedPosts.map(function (p) { return p.post; }).join(', ');
+      var primaryPost = formattedPosts[0].post;
+
       if (isEdit) {
         store.update('circulars', existingCirc.id, {
           title: title,
           code: code,
-          post: post,
-          navTitle: post,
-          vacancies: vac,
+          post: combinedPost,
+          posts: formattedPosts,
+          navTitle: title,
+          vacancies: totalVac,
           applyStart: start,
           applyEnd: end,
           applyEndTime: ''
@@ -460,7 +672,7 @@
           }
         });
 
-        store.audit('EDIT_CIRCULAR', 'circular', existingCirc.id, 'Updated basic information for ' + post + ' (' + code + ')');
+        store.audit('EDIT_CIRCULAR', 'circular', existingCirc.id, 'Updated basic information for ' + combinedPost + ' (' + code + ')');
         ERec.app.renderNav();
         ERec.router.go('#/circulars/new-eligibility/' + existingCirc.id);
         return;
@@ -474,9 +686,10 @@
         isDraft: true,
         code: code,
         title: title,
-        post: post,
-        navTitle: post,
-        vacancies: vac,
+        post: combinedPost,
+        posts: formattedPosts,
+        navTitle: title,
+        vacancies: totalVac,
         poolCount: poolCount,
         applyStart: start,
         applyEnd: end,

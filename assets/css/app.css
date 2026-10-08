@@ -4827,6 +4827,10 @@ a.phase-chip:hover {
   line-height: 1.55;
 }
 
+.preview-notice-backdrop .notice-sheet {
+  min-height: auto;
+}
+
 .notice-sheet.is-hidden {
   display: none !important;
 }

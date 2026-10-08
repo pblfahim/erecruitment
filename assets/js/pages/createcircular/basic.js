@@ -6,7 +6,7 @@
   var ERec = global.ERec = global.ERec || {};
   var store = ERec.store, ui = ERec.ui, fmt = ERec.fmt, pipe = ERec.pipeline;
 
-  var DEMO_APPLICANTS = 40;
+  var DEMO_APPLICANTS = 10;
 
   var STAGE_OPTIONS = [
     { key: 'MCQ', label: 'MCQ', subtitle: 'Screening Test', icon: 'bi-ui-checks', fullTitle: 'Multiple Choice Questions (MCQ)' },
@@ -35,7 +35,14 @@
     var defaultTitle = isEdit ? existingCirc.title : (draft ? draft.title : '');
     var defaultCode = isEdit ? existingCirc.code : (draft ? draft.code : ('HRD/REC/' + y + '/' + fmt.pad(store.all('circulars').length + 1, 2)));
     var defaultPost = isEdit ? existingCirc.post : (draft ? draft.post : '');
-    var defaultVac = isEdit ? existingCirc.vacancies : (draft ? draft.vacancies : 10);
+    var defaultVac = isEdit
+      ? (existingCirc.vacancies < 10 ? fmt.pad(existingCirc.vacancies, 2) : String(existingCirc.vacancies))
+      : (draft && draft.vacancies != null && draft.vacancies !== 10
+          ? (draft.vacancies < 10 ? fmt.pad(draft.vacancies, 2) : String(draft.vacancies))
+          : '02');
+    var defaultPool = (!isEdit && draft && typeof draft.poolCount === 'number' && draft.poolCount !== 35)
+      ? draft.poolCount
+      : 10;
     var defaultStart = isEdit ? (existingCirc.applyStart || fmt.isoDate()) : (draft ? draft.applyStart : fmt.isoDate());
     var defaultEnd = isEdit ? (existingCirc.applyEnd || fmt.addDays(fmt.isoDate(), 30)) : (draft ? draft.applyEnd : fmt.addDays(fmt.isoDate(), 30));
 
@@ -124,15 +131,17 @@
       '</div>' +
       '<div class="col-md-3">' +
       '<label class="form-label">Vacancies <span class="text-danger">*</span></label>' +
-      '<input type="number" class="form-control" id="f-vac" value="' + defaultVac + '" min="1">' +
+      '<input type="text" class="form-control" id="f-vac" value="' + defaultVac + '" placeholder="02" inputmode="numeric">' +
       '</div>' +
       (!isEdit ? ('<div class="col-md-3">' +
         '<label class="form-label">Initial applicants</label>' +
         '<select class="form-select" id="f-pool">' +
-        '<option value="35" selected>Generate 35 test candidates</option>' +
-        '<option value="50">Generate 50 test candidates</option>' +
-        '<option value="15">Generate 15 test candidates</option>' +
-        '<option value="0">Start with 0 (await online applications / Excel)</option>' +
+        '<option value="10"' + (defaultPool === 10 ? ' selected' : '') + '>Generate 10 test candidates</option>' +
+        '<option value="15"' + (defaultPool === 15 ? ' selected' : '') + '>Generate 15 test candidates</option>' +
+        '<option value="25"' + (defaultPool === 25 ? ' selected' : '') + '>Generate 25 test candidates</option>' +
+        '<option value="35"' + (defaultPool === 35 ? ' selected' : '') + '>Generate 35 test candidates</option>' +
+        '<option value="50"' + (defaultPool === 50 ? ' selected' : '') + '>Generate 50 test candidates</option>' +
+        '<option value="0"' + (defaultPool === 0 ? ' selected' : '') + '>Start with 0 (await online applications / Excel)</option>' +
         '</select>' +
         '</div>') : '') +
       '<div class="col-md-6">' +
@@ -209,6 +218,33 @@
 
     view.innerHTML = html;
     ui.bindPostingWizard(view);
+
+    // Vacancies input 2-digit padding & numeric keyboard controls
+    var vacInput = view.querySelector('#f-vac');
+    if (vacInput) {
+      vacInput.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+      });
+      vacInput.addEventListener('blur', function () {
+        var num = parseInt(this.value, 10);
+        if (!isNaN(num) && num > 0) {
+          this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+        } else {
+          this.value = '02';
+        }
+      });
+      vacInput.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          var num = (parseInt(this.value, 10) || 0) + 1;
+          this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          var num = Math.max(1, (parseInt(this.value, 10) || 1) - 1);
+          this.value = num < 10 ? fmt.pad(num, 2) : String(num);
+        }
+      });
+    }
 
     function updateStageViews() {
       var chipsWrap = view.querySelector('#selected-chips-container');
@@ -362,7 +398,7 @@
       var title = (view.querySelector('#f-title').value || '').trim();
       var code = (view.querySelector('#f-code').value || '').trim();
       var post = (view.querySelector('#f-post').value || '').trim();
-      var vac = parseInt(view.querySelector('#f-vac').value, 10) || 1;
+      var vac = parseInt(view.querySelector('#f-vac').value, 10) || 2;
       var rawStart = (view.querySelector('#f-start').value || '').trim();
       var rawEnd = (view.querySelector('#f-end').value || '').trim();
 
@@ -431,7 +467,7 @@
       }
 
       var poolEl = view.querySelector('#f-pool');
-      var poolCount = poolEl ? parseInt(poolEl.value, 10) : 35;
+      var poolCount = poolEl ? parseInt(poolEl.value, 10) : 10;
 
       var draftData = {
         id: 'draft',

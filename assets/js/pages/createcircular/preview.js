@@ -641,8 +641,8 @@
     }
 
     function buildPage1Html(data) {
-      return '<div class="notice-sheet ' + (currentViewMode === 'PAGE_2' ? 'is-hidden' : '') + '" id="notice-sheet-1">' +
-        '<div class="notice-page-badge">Page 1 of 2</div>' +
+      return '<div class="notice-sheet" id="notice-sheet-1" style="min-height: auto;">' +
+        '<div class="notice-page-badge">Page 1 of 1</div>' +
 
         buildLetterheadHtml() +
 
@@ -659,65 +659,29 @@
         '<!-- Terms and conditions header -->' +
         '<div class="notice-terms-title">Required terms &amp; conditions are as follows:</div>' +
 
-        '<!-- Section A: Key Job Responsibilities -->' +
-        '<div class="notice-sec-heading">A. Key Job Responsibilities:</div>' +
-        '<ul class="notice-bullet-list">' +
-        data.responsibilities.map(function (item) {
-          return '<li>' + item + '</li>';
-        }).join('') +
-        '</ul>' +
-
-        '<!-- Section B: Educational Qualification -->' +
-        '<div class="notice-sec-heading">B. Educational Qualification:</div>' +
+        '<!-- Section A: Educational Qualification -->' +
+        '<div class="notice-sec-heading">A. Educational Qualification:</div>' +
         '<ul class="notice-bullet-list">' +
         data.qualifications.map(function (item) {
           return '<li>' + item + '</li>';
         }).join('') +
         '</ul>' +
 
-        '<!-- Section C: Experience -->' +
-        '<div class="position-relative">' +
-        '<div class="notice-sec-heading">C. Experience:</div>' +
-        '<ul class="notice-bullet-list mb-4">' +
+        '<!-- Section B: Experience -->' +
+        '<div class="notice-sec-heading">B. Experience:</div>' +
+        '<ul class="notice-bullet-list mb-3">' +
         data.experience.map(function (item) {
           return '<li>' + item + '</li>';
         }).join('') +
         '</ul>' +
 
-        '<!-- Official Seal at bottom-right corner of Page 1 -->' +
-        renderOfficialSealSvg('p1') +
-        '</div>' +
-
-        '<!-- Sheet Footer Indicator -->' +
-        '<div class="notice-sheet-footer">' +
-        '<span>Pubali Bank PLC &middot; Circular Notice ' + fmt.esc(data.code) + '</span>' +
-        '<span>Page 1 of 2</span>' +
-        '</div>' +
-
-        '</div>';
-    }
-
-    function buildPage2Html(data) {
-      return '<div class="notice-sheet ' + (currentViewMode === 'PAGE_1' ? 'is-hidden' : '') + '" id="notice-sheet-2">' +
-        '<div class="notice-page-badge">Page 2 of 2</div>' +
-
-        buildLetterheadHtml() +
-
-        '<!-- Section D: Technical Proficiency -->' +
-        '<div class="notice-sec-heading">D. Technical Proficiency:</div>' +
-        '<ul class="notice-bullet-list">' +
-        data.technicalProficiency.map(function (item) {
-          return '<li>' + item + '</li>';
-        }).join('') +
-        '</ul>' +
-
-        '<!-- Section E: Age limit -->' +
+        '<!-- Section C: Age limit -->' +
         '<div class="mb-3" style="font-size: 13px; line-height: 1.6; color: #111827;">' +
-        '<strong>E. Age limit:</strong> ' + data.ageLimitText +
+        '<strong>C. Age limit:</strong> ' + data.ageLimitText +
         '</div>' +
 
-        '<!-- Section F: General Conditions -->' +
-        '<div class="notice-sec-heading">F. General Conditions:</div>' +
+        '<!-- Section D: General Conditions -->' +
+        '<div class="notice-sec-heading">D. General Conditions:</div>' +
         '<ol class="notice-numbered-list">' +
         '<li><strong>Remuneration:</strong> ' + data.remunerationText + '</li>' +
         '<li>In-house candidates are not permitted to apply.</li>' +
@@ -732,7 +696,7 @@
         '</ul>' +
 
         '<!-- Apply Instructions -->' +
-        '<div class="notice-apply-section mt-3 mb-2">' +
+        '<div class="notice-apply-section mt-3 mb-2 position-relative">' +
         '<div class="notice-apply-title">Apply Instructions:</div>' +
         '<p class="mb-2" style="text-align: justify;">' +
         'Interested candidates who fulfill the requirements should apply online, link: ' +
@@ -747,17 +711,21 @@
         'Management of the Bank reserves the right to reject any or all applications without assigning any reason whatsoever.' +
         '</p>' +
 
-        '<!-- Official Seal at bottom-right corner of Page 2 -->' +
-        renderOfficialSealSvg('p2') +
+        '<!-- Official Seal at bottom-right corner of Page -->' +
+        renderOfficialSealSvg('p1') +
         '</div>' +
 
         '<!-- Sheet Footer Indicator -->' +
         '<div class="notice-sheet-footer">' +
         '<span>Pubali Bank PLC &middot; Circular Notice ' + fmt.esc(data.code) + '</span>' +
-        '<span>Page 2 of 2</span>' +
+        '<span>Page 1 of 1</span>' +
         '</div>' +
 
         '</div>';
+    }
+
+    function buildPage2Html(data) {
+      return '';
     }
 
     function buildUploadedFileView(doc) {
@@ -814,7 +782,6 @@
       return '<div class="preview-notice-backdrop" id="circular-notice-document">' +
         '<div class="notice-sheet-wrapper" id="notice-sheet-wrapper" ' + zoomStyle + '>' +
         buildPage1Html(data) +
-        buildPage2Html(data) +
         '</div>' +
         '</div>';
     }
@@ -841,17 +808,9 @@
           '<span class="badge bg-success text-white px-2.5 py-1.5 fs-12 fw-semibold d-inline-flex align-items-center gap-1 shadow-xs">' +
           '<i class="bi bi-file-earmark-pdf-fill"></i> Official Circular Notice' +
           '</span>' +
-          '<div class="btn-group btn-group-sm" role="group" aria-label="Page View Modes">' +
-          '<button type="button" class="btn btn-outline-secondary btn-doc-toggle ' + (currentViewMode === 'ALL' ? 'active' : '') + '" data-mode="ALL" title="View all 2 pages continuously">' +
-          'All Pages' +
-          '</button>' +
-          '<button type="button" class="btn btn-outline-secondary btn-doc-toggle ' + (currentViewMode === 'PAGE_1' ? 'active' : '') + '" data-mode="PAGE_1" title="View Page 1 only">' +
-          'Page 1' +
-          '</button>' +
-          '<button type="button" class="btn btn-outline-secondary btn-doc-toggle ' + (currentViewMode === 'PAGE_2' ? 'active' : '') + '" data-mode="PAGE_2" title="View Page 2 only">' +
-          'Page 2' +
-          '</button>' +
-          '</div>';
+          '<span class="badge bg-light text-dark border px-2.5 py-1.5 fs-12 fw-medium d-inline-flex align-items-center gap-1 shadow-2xs">' +
+          '<i class="bi bi-file-earmark-check"></i> Page 1 of 1' +
+          '</span>';
       }
 
       var rightHtml = '';

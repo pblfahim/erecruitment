@@ -183,7 +183,7 @@
       insert('stages', stageRecord);
     });
 
-    var poolCount = typeof d.poolCount === 'number' ? d.poolCount : 35;
+    var poolCount = typeof d.poolCount === 'number' ? d.poolCount : 10;
     if (poolCount > 0) {
       var appPrefix = code.replace(/\W+/g, '').slice(-6).toUpperCase() || 'APP';
       var apps = ERec.seed.makeApplicants({
